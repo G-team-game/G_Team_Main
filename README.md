@@ -1,6 +1,6 @@
 # Gチームメインプロジェクト
 * Gチームのゲーム制作は基本的にここで進めていきます
-
+* かんばんは[こちら](https://github.com/orgs/G-team-game/projects/10/views/1?visibleFields=%5B%22Title%22%2C%22Assignees%22%2C%22Status%22%2C%22Labels%22%5D)
  ---
  ## Environment
 - Unity
