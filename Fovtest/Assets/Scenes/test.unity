@@ -235,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _self: {fileID: 117963181}
   _target: {fileID: 1929621887}
-  _sightAngle: 30
+  _sightAngle: 40
   _maxDistance: 5
 --- !u!1 &752475198
 GameObject:

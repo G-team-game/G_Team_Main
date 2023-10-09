@@ -45,7 +45,14 @@ public class SightChecker : MonoBehaviour
     }
 
     #endregion
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red; // カラーを設定（赤色など）
+        Gizmos.DrawWireSphere(transform.position, _maxDistance); // 最大距離の円を描画
+        Gizmos.DrawLine(transform.position, _target.position); // 自身からターゲットへのラインを描画
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, Quaternion.LookRotation(_self.forward), Vector3.one);
+        Gizmos.DrawFrustum(Vector3.zero, _sightAngle, 0f, _maxDistance, 1f);
+    }
     #region Debug
 
     // 視界判定の結果をGUI出力
