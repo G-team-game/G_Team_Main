@@ -17,9 +17,10 @@ public class SightChecker : MonoBehaviour
     private void Update()
     {
         float distanceToPlayer = Vector3.Distance(_self.position, _target.position);
-
+        GetComponent<Renderer>().material.color = Color.white;
         if (distanceToPlayer <= _minDistanceToReact)
         {
+            GetComponent<Renderer>().material.color = Color.red;
             // プレイヤーが至近距離にいる場合、ターゲットの方を向く
             Vector3 targetDirection = (_target.position - _self.position).normalized;
             // レイキャストを使用して障害物がないか確認
@@ -31,15 +32,18 @@ public class SightChecker : MonoBehaviour
         }
         else
         {
+
             // プレイヤーが至近距離にいない場合、視界判定を行う
             bool isVisible = IsVisible();
             timeSincePlayerLost += Time.deltaTime;
             if (isVisible)
             {
+                
                 // ターゲットが見えている場合、視界内の通常の処理を行う
                 // レイキャストを使用して障害物がないか確認
                 if (!IsObstacleBetween(_self.position, _target.position))
                 {
+                    GetComponent<Renderer>().material.color = Color.red;
                     timeSincePlayerLost = 0.0f;
                     isPlayerInSight = true;
                     Vector3 targetDirection = (_target.position - _self.position).normalized;
@@ -49,6 +53,7 @@ public class SightChecker : MonoBehaviour
             }
             else if (isPlayerInSight&& !IsObstacleBetween(_self.position, _target.position))
             {
+                GetComponent<Renderer>().material.color = Color.magenta;
                 // ターゲットが見えていないが、最初の何秒間かはプレイヤーの方を向き続ける
                 if (timeSincePlayerLost <= timeToKeepFacingPlayer)
                 {
@@ -58,11 +63,13 @@ public class SightChecker : MonoBehaviour
                 }
                 else
                 {
+
                     isPlayerInSight = false;
                 }
             }
             else
             {
+                
                 // ターゲットが見えていない場合、何もしないか、別の行動を追加する
             }
         }

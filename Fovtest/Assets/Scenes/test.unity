@@ -236,8 +236,8 @@ MonoBehaviour:
   _self: {fileID: 117963181}
   _target: {fileID: 1929621887}
   _sightAngle: 50
-  _maxDistance: 10
-  _rotationSpeed: 5
+  _maxDistance: 15
+  _rotationSpeed: 25
   timeToKeepFacingPlayer: 0.5
   _minDistanceToReact: 2
   _obstacleLayer:
@@ -530,6 +530,7 @@ GameObject:
   - component: {fileID: 1929621886}
   - component: {fileID: 1929621885}
   - component: {fileID: 1929621884}
+  - component: {fileID: 1929621888}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -615,3 +616,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1929621888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1929621883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69debd512980c5041b06fd70f956848a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 20
