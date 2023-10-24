@@ -25,7 +25,7 @@ public class SightChecker : MonoBehaviour
         GetComponent<Renderer>().material.color = Color.white;
         if (distanceToPlayer <= _minDistanceToReact)
         {
-            GetComponent<Renderer>().material.color = Color.red;
+            GetComponent<Renderer>().material.color = Color.blue;
             // プレイヤーが至近距離にいる場合、ターゲットの方を向く
             Vector3 targetDirection = (_target.position - _self.position).normalized;
             // レイキャストを使用して障害物がないか確認
@@ -48,7 +48,7 @@ public class SightChecker : MonoBehaviour
                 // レイキャストを使用して障害物がないか確認
                 if (!IsObstacleBetween(_self.position, _target.position))
                 {
-                    GetComponent<Renderer>().material.color = Color.red;
+                    GetComponent<Renderer>().material.color = Color.blue;
                     timeSincePlayerLost = 0.0f;
                     isPlayerInSight = true;
                     Vector3 targetDirection = (_target.position - _self.position).normalized;
@@ -58,7 +58,7 @@ public class SightChecker : MonoBehaviour
             }
             else if (isPlayerInSight&& !IsObstacleBetween(_self.position, _target.position))
             {
-                GetComponent<Renderer>().material.color = Color.magenta;
+                GetComponent<Renderer>().material.color = Color.cyan;
                 // ターゲットが見えていないが、最初の何秒間かはプレイヤーの方を向き続ける
                 if (timeSincePlayerLost <= timeToKeepFacingPlayer)
                 {
