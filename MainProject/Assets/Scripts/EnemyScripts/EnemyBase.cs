@@ -39,11 +39,8 @@ public class EnemyBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-        if(isDash)
-            transform.Translate(Vector3.forward * dashSpeed * Time.deltaTime);
-        else
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 

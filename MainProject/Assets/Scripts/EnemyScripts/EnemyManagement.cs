@@ -11,10 +11,10 @@ public class EnemyManagement : MonoBehaviour
 
     [SerializeField] int wanderingEnemyNumbers=5;
     [SerializeField] int chasingEnemyNumbers=3;
-    [SerializeField] int dashEnemyNumbers=1;
+    //[SerializeField] int dashEnemyNumbers=1;
     [SerializeField] int floatingEnemyNumbers = 1;
 
-    [SerializeField] float dashSelectTime = 5.0f;
+    //[SerializeField] float dashSelectTime = 5.0f;
 
     //敵をスポーンさせるときの名前です。dashは徘徊してるのが変化するやつなので書いてないです。
     [SerializeField] string wanderingEnemyName = "WanderingEnemy";
@@ -42,12 +42,12 @@ public class EnemyManagement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("SelectDashEnemy", dashSelectTime, dashSelectTime);
-        if (wanderingEnemyNumbers < dashEnemyNumbers)
-        {
-            Debug.LogWarning("DashEnemyの方がWanderingEnemyより多いです!!!");
-            dashEnemyNumbers = wanderingEnemyNumbers;
-        }
+        //InvokeRepeating("SelectDashEnemy", dashSelectTime, dashSelectTime);
+        //if (wanderingEnemyNumbers < dashEnemyNumbers)
+        //{
+        //    Debug.LogWarning("DashEnemyの方がWanderingEnemyより多いです!!!");
+        //    dashEnemyNumbers = wanderingEnemyNumbers;
+        //}
         StartSpawnEney(wanderingEnemyNumbers,wanderingEnemyPrefab,wanderingEnemyName,wanderingList);
         StartSpawnEney(chasingEnemyNumbers, chasingEnemyPrefab, chasingEnemyName, chaseList);
         StartSpawnEney(floatingEnemyNumbers, floatingEnemyPrefab, floatingEnemyName, floatList);
@@ -74,19 +74,25 @@ public class EnemyManagement : MonoBehaviour
         }
     }
 
-    private void SelectDashEnemy()
+    public void SelectDashEnemy(GameObject enemyobject)
     {
-        dashList.Clear();
-        List<int> selectedDash = new List<int>();
-        for(int i=0;i<wanderingList.Count;i++)
-            selectedDash.Add(i);
-        for(int i=0;i<dashEnemyNumbers;i++)
+        if(wanderingList.Contains(enemyobject)&&!dashList.Contains(enemyobject))
         {
-            int randomIndex = Random.Range(0, selectedDash.Count);
-            int selectedIndex = selectedDash[randomIndex];
-            dashList.Add(wanderingList[selectedIndex]);
-            selectedDash.RemoveAt(randomIndex);
-            Debug.Log("ダッシュ開始"+wanderingList[selectedIndex]);
+            Debug.Log("ダッシュ");
+            dashList.Add(enemyobject);
         }
+
+        //dashList.Clear();
+        //List<int> selectedDash = new List<int>();
+        //for(int i=0;i<wanderingList.Count;i++)
+        //    selectedDash.Add(i);
+        //for(int i=0;i<dashEnemyNumbers;i++)
+        //{
+        //    int randomIndex = Random.Range(0, selectedDash.Count);
+        //    int selectedIndex = selectedDash[randomIndex];
+        //    dashList.Add(wanderingList[selectedIndex]);
+        //    selectedDash.RemoveAt(randomIndex);
+        //    Debug.Log("ダッシュ開始"+wanderingList[selectedIndex]);
+        //}
     }
 }
