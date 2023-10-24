@@ -15,7 +15,7 @@ public class EnemyMgr : MonoBehaviour
     public bool isFire = false;
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -37,23 +37,23 @@ public class EnemyMgr : MonoBehaviour
         //this.GetComponent<SphereCollider>().enabled = false;
         float t = 0;
         targetPos = player.transform.position;
-       // this.transform.localScale = new Vector3(Scale, Scale, Scale);
-        while (t<1)
+        // this.transform.localScale = new Vector3(Scale, Scale, Scale);
+        while (t < 1)
         {
             t += Time.deltaTime;
             transform.position = Vector3.Lerp(transform.position, targetPos, t);
             transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * Scale, t);
-            t += Time.deltaTime*0.01f;
+            t += Time.deltaTime * 0.01f;
             yield return 0;
         }
 
         //UIMgr.Instance.isFire = true;
 
         this.gameObject.transform.SetParent(UIMgr.Instance.gunPos);
-   
+
         transform.localPosition = new Vector3(0, 0, 0.1f);
         //yield return new WaitForSeconds(0.5f);
-        
+
         UIMgr.Instance.ChangeBulletNum(1, this.gameObject);
     }
 
@@ -69,5 +69,5 @@ public class EnemyMgr : MonoBehaviour
             }
         }
     }
-   
+
 }
