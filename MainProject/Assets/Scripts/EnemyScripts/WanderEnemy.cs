@@ -12,26 +12,12 @@ public class WanderEnemy : EnemyBase
     }
     protected override void Update()
     {
-        if (!CheckDashList(this.gameObject)&&isDash)
-            isDash = false;
         if (isDash)
         {
+            StartCoroutine(RotateMove());
+            isDash = false;
             direction = (dashPosition - transform.position).normalized;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            float t = 0;
-
-            while (t < 1)
-            {
-                t += Time.deltaTime / 1.0f; // 1秒かけて向きを変える
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, t);
-            }
-            transform.Translate(Vector3.forward * dashSpeed * Time.deltaTime);
-            if (Vector3.Distance(transform.position,dashPosition) < 1.0f)
-            {
-                isDash = false;
-                gameObject.GetComponent<Renderer>().material.color = Color.blue;
-                enemyManagement.dashList.Remove(this.gameObject);
-            }
+            
         }
         else
         {
@@ -48,31 +34,44 @@ public class WanderEnemy : EnemyBase
         }
     }
 
-    IEnumerator RotationTowardsPlayer()
+    //コルーチン使ってやりたい
+    IEnumerator RotateMove()
     {
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        Quaternion targetRotation = Quaternion.LookRotation(dashPosition-transform.position);
         float elapsedTime = 0;
         float rotationTime = 1.0f;
+
         while (elapsedTime < rotationTime)
         {
+            Debug.Log("向き変え");
+            isRotating = true;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, elapsedTime / rotationTime);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        StartCoroutine(MoveTowardsPlayer());
-    }
-    IEnumerator MoveTowardsPlayer()
-    {
-        float moveTime = 2.0f;
-        float decelerationTime = 1.0f;
-        for(float t=0;t<moveTime;t+=Time.deltaTime)
+        isRotating = false;
+        float moveSpeed = dashSpeed;
+        while (Vector3.Distance(transform.position, dashPosition) > 0.01f)
         {
-            Vector3 moveDirection=(dashPosition-transform.position).normalized;
-            transform.Translate(moveDirection*dashSpeed*Time.deltaTime);
-
-            
+            Debug.Log("移動");
+            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            //transform.position = Vector3.MoveTowards(transform.position, dashPosition, dashSpeed * Time.deltaTime);
+            yield return null;
         }
-        yield return null;
+        float decelerationTime = 1.0f;
+        float initialSpeed = dashSpeed;
+        float timer = 0;
+
+        while (timer < decelerationTime)
+        {
+            Debug.Log("減速");
+            moveSpeed  = Mathf.Lerp(initialSpeed, 0, timer / decelerationTime);
+            timer += Time.deltaTime;
+            transform.Translate(Vector3.forward*moveSpeed*Time.deltaTime);
+            yield return null;
+        }
+        Debug.Log("すとっぷ");
+        yield return new WaitForSeconds(1.0f);
     }
 
     private bool CheckDashList(GameObject obj)
@@ -84,6 +83,5 @@ public class WanderEnemy : EnemyBase
     {
         isDash = true;
         dashPosition = playerTransform.position;
-        StartCoroutine(RotationTowardsPlayer());
     }
 }
