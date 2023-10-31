@@ -34,7 +34,7 @@ public class WanderEnemy : EnemyBase
         }
     }
 
-    //コルーチン使ってやりたい
+    //コルーチン使ってやる?
     IEnumerator RotateMove()
     {
         Quaternion targetRotation = Quaternion.LookRotation(dashPosition-transform.position);
