@@ -45,7 +45,6 @@ public class PlayerSightChecker : MonoBehaviour
                     if (hitObject.CompareTag("WanderEnemy"))
                     {
                         Debug.Log("ŒŸ’m");
-                        hitObject.GetComponent<Renderer>().material.color = Color.white;
                         enemyManager.SelectDashEnemy(hitObject);
                     }
                 }

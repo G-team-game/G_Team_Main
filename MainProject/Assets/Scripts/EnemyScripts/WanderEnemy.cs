@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class WanderEnemy : EnemyBase
 {
-    bool isRotating = false;
+    bool isWaiting = false;
+    bool isCheckList = true;
     protected override void Start()
     {
         base.Start();
@@ -12,66 +13,35 @@ public class WanderEnemy : EnemyBase
     }
     protected override void Update()
     {
-        if (isDash)
+        if (isWaiting)
         {
-            StartCoroutine(RotateMove());
-            isDash = false;
-            direction = (dashPosition - transform.position).normalized;
-            
+            transform.Translate(Vector3.forward*dashSpeed*Time.deltaTime);
+            Debug.Log("待機中…");
         }
         else
         {
-            if (CheckDashList(this.gameObject))
+            if (isDash)
             {
-                StartDashTowardsPlayer();
+                direction = (dashPosition - transform.position).normalized;
+                if (Vector3.Distance(transform.position, dashPosition) < 0.1f)
+                {
+                    StartCoroutine(waitForSeconds());
+                }
             }
-            if (Vector3.Distance(transform.position, wanderPosition) < 1.0f)
+            else
             {
-                SetWayPoint();
+                if (CheckDashList(this.gameObject)&&isCheckList)
+                {
+                    StartDashTowardsPlayer();
+                }
+                if (Vector3.Distance(transform.position, wanderPosition) < 1.0f)
+                {
+                    SetWayPoint();
+                }
+                direction = (wanderPosition - transform.position).normalized;
             }
-            direction = (wanderPosition - transform.position).normalized;
             base.Update();
         }
-    }
-
-    //コルーチン使ってやる?
-    IEnumerator RotateMove()
-    {
-        Quaternion targetRotation = Quaternion.LookRotation(dashPosition-transform.position);
-        float elapsedTime = 0;
-        float rotationTime = 1.0f;
-
-        while (elapsedTime < rotationTime)
-        {
-            Debug.Log("向き変え");
-            isRotating = true;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, elapsedTime / rotationTime);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        isRotating = false;
-        float moveSpeed = dashSpeed;
-        while (Vector3.Distance(transform.position, dashPosition) > 0.01f)
-        {
-            Debug.Log("移動");
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-            //transform.position = Vector3.MoveTowards(transform.position, dashPosition, dashSpeed * Time.deltaTime);
-            yield return null;
-        }
-        float decelerationTime = 1.0f;
-        float initialSpeed = dashSpeed;
-        float timer = 0;
-
-        while (timer < decelerationTime)
-        {
-            Debug.Log("減速");
-            moveSpeed  = Mathf.Lerp(initialSpeed, 0, timer / decelerationTime);
-            timer += Time.deltaTime;
-            transform.Translate(Vector3.forward*moveSpeed*Time.deltaTime);
-            yield return null;
-        }
-        Debug.Log("すとっぷ");
-        yield return new WaitForSeconds(1.0f);
     }
 
     private bool CheckDashList(GameObject obj)
@@ -82,6 +52,23 @@ public class WanderEnemy : EnemyBase
     private void StartDashTowardsPlayer()
     {
         isDash = true;
+        gameObject.GetComponent<Renderer>().material.color = Color.white;
         dashPosition = playerTransform.position;
+    }
+    IEnumerator waitForSeconds()
+    {
+        isWaiting = true;
+        isCheckList = false;
+        enemyManagement.dashList.Remove(this.gameObject);
+        gameObject.GetComponent<Renderer>().material.color = Color.black;
+        yield return new WaitForSeconds(1.0f);
+        gameObject.GetComponent<Renderer>().material.color = Color.gray;
+        isDash = false;
+        SetWayPoint();
+        isWaiting = false;
+        yield return new WaitForSeconds(4.0f);
+        gameObject.GetComponent<Renderer>().material.color = Color.blue;
+        isCheckList = true;
+
     }
 }
