@@ -1,3 +1,7 @@
+//メモ
+//ランダムで座標決めるときに壁とかにめり込まないようにRayCast使う？
+//ランダム座標決めるときに地面に埋まんない用にY座標正にしてたけどステージによって変えたほうがいい?
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,20 +45,20 @@ public class EnemyBase : MonoBehaviour
     {
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-        if(isDash)
+        if (isDash)
             transform.Translate(Vector3.forward * dashSpeed * Time.deltaTime);
         else
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
-    protected virtual void SetWayPoint()//徘徊
+    protected virtual void SetWayPoint()
     {
         Vector3 randomPosition = GenerateRandomPosition();
         //Debug.Log("Random Position: " + randomPosition + this.gameObject.name);
         wanderPosition = randomPosition;
 
     }
-    private Vector3 GenerateRandomPosition()//徘徊
+    private Vector3 GenerateRandomPosition()//座標決定用
     {
         //float minX = Mathf.Min(rangeA.position.x, rangeB.position.x);
         //float maxX = Mathf.Max(rangeA.position.x, rangeB.position.x);
@@ -76,7 +80,7 @@ public class EnemyBase : MonoBehaviour
         //一応どっちも使うかもしれないので残してます。
         Vector3 randomDirection = Random.insideUnitSphere * wanderingDistance;
         randomDirection += transform.position; // 現在の位置を起点にする
-        randomDirection.y = Mathf.Abs(randomDirection.y); //地面に埋まっちゃうのでy座標を正に
+        randomDirection.y = Mathf.Abs(randomDirection.y);
 
         // 確認する範囲の最小値と最大値を求める
         Vector3 minRange = new Vector3(

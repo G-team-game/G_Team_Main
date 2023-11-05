@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: -3735545862947059660}
   m_Layer: 0
   m_Name: WanderEnemy
-  m_TagString: Untagged
+  m_TagString: WanderEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,8 +209,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  rotationSpeed: 5
-  dashSpeed: 30
+  rotationSpeed: 20
+  dashSpeed: 10
   wanderingDistance: 30
   chasingMaxDistance: 15
   chasingPlayerDistance: 3

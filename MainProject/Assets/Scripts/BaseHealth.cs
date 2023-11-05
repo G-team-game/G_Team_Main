@@ -10,11 +10,11 @@ public class BaseHealth : MonoBehaviour
 
     protected RectTransform backFillImage;
 
-    [Header("血条的填充速度")]
+    [Header("血条的帖箱速度")]
     public float fillSpeed = 3;
-    [Header("血条填充是否有开始延迟")]
+    [Header("血条帖箱是否有开始延迟")]
     public bool isDelay = false;
-    [Header("开始延迟的时间")]
+    [Header("开始延迟的时紒E")]
     public float delayTimer;
     protected WaitForSeconds wait;
     protected  Coroutine coroutine;
@@ -36,7 +36,7 @@ public class BaseHealth : MonoBehaviour
        
     }
     /// <summary>
-    /// 初始化血条
+    /// 初始化血虂E
     /// </summary>
     public virtual void InitHP()
     {
@@ -60,7 +60,7 @@ public class BaseHealth : MonoBehaviour
         transform.LookAt(player);
     }
     /// <summary>
-    /// 更新血条UI 增加血量形式
+    /// 竵E卵鮑I 增加血量形式
     /// </summary>
     /// <param name="hp"></param>
     /// <param name="max"></param>
@@ -71,7 +71,7 @@ public class BaseHealth : MonoBehaviour
 
     }
     /// <summary>
-    /// 更新血条UI 减少血量形式
+    /// 竵E卵鮑I 减少血量形式
     /// </summary>
     /// <param name="hp"></param>
     /// <param name="max"></param>

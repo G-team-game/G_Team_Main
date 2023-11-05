@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WanderEnemy : EnemyBase
 {
+    bool isWaiting = false;
+    bool isCheckList = true;
     protected override void Start()
     {
         base.Start();
@@ -11,30 +13,35 @@ public class WanderEnemy : EnemyBase
     }
     protected override void Update()
     {
-        if (!CheckDashList(this.gameObject)&&isDash)
-            isDash = false;
-        if (isDash)
+        if (isWaiting)
         {
-            direction = (dashPosition - transform.position).normalized;
-            if (Vector3.Distance(transform.position,dashPosition) < 1.0f)
-            {
-                isDash = false;
-                enemyManagement.dashList.Remove(this.gameObject);
-            }
+            transform.Translate(Vector3.forward*dashSpeed*Time.deltaTime);
+            Debug.Log("‘Ò‹@’†c");
         }
         else
         {
-            if (CheckDashList(this.gameObject))
+            if (isDash)
             {
-                StartDashTowardsPlayer();
+                direction = (dashPosition - transform.position).normalized;
+                if (Vector3.Distance(transform.position, dashPosition) < 0.1f)
+                {
+                    StartCoroutine(waitForSeconds());
+                }
             }
-            if (Vector3.Distance(transform.position, wanderPosition) < 1f)
+            else
             {
-                SetWayPoint();
+                if (CheckDashList(this.gameObject)&&isCheckList)
+                {
+                    StartDashTowardsPlayer();
+                }
+                if (Vector3.Distance(transform.position, wanderPosition) < 1.0f)
+                {
+                    SetWayPoint();
+                }
+                direction = (wanderPosition - transform.position).normalized;
             }
-            direction = (wanderPosition - transform.position).normalized;
+            base.Update();
         }
-        base.Update();
     }
 
     private bool CheckDashList(GameObject obj)
@@ -45,6 +52,23 @@ public class WanderEnemy : EnemyBase
     private void StartDashTowardsPlayer()
     {
         isDash = true;
+        gameObject.GetComponent<Renderer>().material.color = Color.white;
         dashPosition = playerTransform.position;
+    }
+    IEnumerator waitForSeconds()
+    {
+        isWaiting = true;
+        isCheckList = false;
+        enemyManagement.dashList.Remove(this.gameObject);
+        gameObject.GetComponent<Renderer>().material.color = Color.black;
+        yield return new WaitForSeconds(1.0f);
+        gameObject.GetComponent<Renderer>().material.color = Color.gray;
+        isDash = false;
+        SetWayPoint();
+        isWaiting = false;
+        yield return new WaitForSeconds(4.0f);
+        gameObject.GetComponent<Renderer>().material.color = Color.blue;
+        isCheckList = true;
+
     }
 }
