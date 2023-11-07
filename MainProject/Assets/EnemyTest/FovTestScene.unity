@@ -183,7 +183,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14717435}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 0, z: 11.56}
+  m_LocalPosition: {x: -2.5, y: 0, z: 15.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12562,7 +12562,7 @@ MonoBehaviour:
   chasingEnemyPrefab: {fileID: 4137581206254706284, guid: 8f4d068b7d51f2d489ae714584fb7df5, type: 3}
   floatingEnemyPrefab: {fileID: 4137581206254706284, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
   wanderingEnemyNumbers: 1
-  chasingEnemyNumbers: 0
+  chasingEnemyNumbers: 5
   floatingEnemyNumbers: 0
   wanderingEnemyName: WanderingEnemy
   chasingEnemyName: ChaseEnemy
@@ -13682,6 +13682,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: PlayerCam
   m_TagString: MainCamera
@@ -13772,6 +13773,19 @@ MonoBehaviour:
   sensX: 400
   sensY: 400
   orientation: {fileID: 1236667191}
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c4363b514c6394d8fe8feb0911a3ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRaycastDistance: 30
 --- !u!43 &1016780568
 Mesh:
   m_ObjectHideFlags: 0

@@ -1,11 +1,16 @@
+//今はそのまま突っ込むけど壁とかにぶつかったら止まるようにする？
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WanderEnemy : EnemyBase
 {
-    bool isWaiting = false;
+    bool isForwardDashing = false;
     bool isCheckList = true;
+    private Vector3 wanderPosition;
+    private Vector3 dashPosition;
+    //ランダム座標を決定するときにenemyからどこまでの範囲で座標を決めるか
+    [SerializeField] protected float wanderingDistance = 30f;
     protected override void Start()
     {
         base.Start();
@@ -13,10 +18,9 @@ public class WanderEnemy : EnemyBase
     }
     protected override void Update()
     {
-        if (isWaiting)
+        if (isForwardDashing)
         {
             transform.Translate(Vector3.forward*dashSpeed*Time.deltaTime);
-            Debug.Log("待機中…");
         }
         else
         {
@@ -57,18 +61,60 @@ public class WanderEnemy : EnemyBase
     }
     IEnumerator waitForSeconds()
     {
-        isWaiting = true;
+        isForwardDashing = true;
         isCheckList = false;
         enemyManagement.dashList.Remove(this.gameObject);
         gameObject.GetComponent<Renderer>().material.color = Color.black;
-        yield return new WaitForSeconds(1.0f);
+        //Colliderでぶつかるまで～みたいな感じにしようとしたけど壁で囲まれてるわけじゃないから来週ぶつかるor一定時間経過でストップみたいなのにする
+        yield return new WaitForSeconds(3.0f);
         gameObject.GetComponent<Renderer>().material.color = Color.gray;
         isDash = false;
         SetWayPoint();
-        isWaiting = false;
-        yield return new WaitForSeconds(4.0f);
+        isForwardDashing = false;
+        yield return new WaitForSeconds(2.0f);
         gameObject.GetComponent<Renderer>().material.color = Color.blue;
         isCheckList = true;
 
     }
+
+    protected virtual void SetWayPoint()
+    {
+        Vector3 randomPosition = GenerateRandomPosition();
+        wanderPosition = randomPosition;
+
+    }
+    private Vector3 GenerateRandomPosition()
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * wanderingDistance;
+        randomDirection += transform.position; // 現在の位置を起点にする
+        randomDirection.y = Mathf.Abs(randomDirection.y);
+
+        // 確認する範囲の最小値と最大値を求める
+        Vector3 minRange = new Vector3(
+            Mathf.Min(rangeA.position.x, rangeB.position.x),
+            Mathf.Min(rangeA.position.y, rangeB.position.y),
+            Mathf.Min(rangeA.position.z, rangeB.position.z)
+        );
+
+        Vector3 maxRange = new Vector3(
+            Mathf.Max(rangeA.position.x, rangeB.position.x),
+            Mathf.Max(rangeA.position.y, rangeB.position.y),
+            Mathf.Max(rangeA.position.z, rangeB.position.z)
+        );
+
+        // 範囲内にランダムな座標があるか確認する
+        if (randomDirection.x >= minRange.x && randomDirection.x <= maxRange.x &&
+            randomDirection.y >= minRange.y && randomDirection.y <= maxRange.y &&
+            randomDirection.z >= minRange.z && randomDirection.z <= maxRange.z)
+        {
+            return randomDirection; // 範囲内の場合はそのまま返す
+        }
+        else
+        {
+            // 範囲外の場合は再度生成する
+            return GenerateRandomPosition();
+        }
+    }
+
+
 }

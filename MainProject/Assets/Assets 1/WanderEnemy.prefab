@@ -209,8 +209,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  rotationSpeed: 20
   dashSpeed: 10
+  rotationSpeed: 20
   wanderingDistance: 30
-  chasingMaxDistance: 15
-  chasingPlayerDistance: 3
