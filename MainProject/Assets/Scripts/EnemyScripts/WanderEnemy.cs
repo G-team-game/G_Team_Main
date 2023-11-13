@@ -90,7 +90,7 @@ public class WanderEnemy : EnemyBase
 
     }
 
-    protected virtual void SetWayPoint()
+    private void SetWayPoint()
     {
         Vector3 randomPosition = GenerateRandomPosition();
         wanderPosition = randomPosition;
