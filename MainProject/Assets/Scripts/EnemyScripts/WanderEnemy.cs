@@ -7,6 +7,8 @@ public class WanderEnemy : EnemyBase
 {
     bool isForwardDashing = false;
     bool isCheckList = true;
+    bool isCoroutine = false;
+    bool isStop=false;
     private Vector3 wanderPosition;
     private Vector3 dashPosition;
     //ランダム座標を決定するときにenemyからどこまでの範囲で座標を決めるか
@@ -18,32 +20,23 @@ public class WanderEnemy : EnemyBase
     }
     protected override void Update()
     {
-        if (isForwardDashing)
+        if (isDash && !isCoroutine)
         {
-            transform.Translate(Vector3.forward*dashSpeed*Time.deltaTime);
+            isCoroutine = true;
+            isCheckList = false;
+            StartCoroutine(dashCoroutine());
         }
-        else
+        else if(!isDash)
         {
-            if (isDash)
+            if (CheckDashList(this.gameObject) && isCheckList)
             {
-                direction = (dashPosition - transform.position).normalized;
-                if (Vector3.Distance(transform.position, dashPosition) < 0.1f)
-                {
-                    StartCoroutine(waitForSeconds());
-                }
+                StartDashTowardsPlayer();
             }
-            else
+            if (Vector3.Distance(transform.position, wanderPosition) < 1.0f)
             {
-                if (CheckDashList(this.gameObject)&&isCheckList)
-                {
-                    StartDashTowardsPlayer();
-                }
-                if (Vector3.Distance(transform.position, wanderPosition) < 1.0f)
-                {
-                    SetWayPoint();
-                }
-                direction = (wanderPosition - transform.position).normalized;
+                SetWayPoint();
             }
+            direction = (wanderPosition - transform.position).normalized;
             base.Update();
         }
     }
@@ -59,20 +52,40 @@ public class WanderEnemy : EnemyBase
         gameObject.GetComponent<Renderer>().material.color = Color.white;
         dashPosition = playerTransform.position;
     }
-    IEnumerator waitForSeconds()
+    IEnumerator dashCoroutine()
     {
-        isForwardDashing = true;
-        isCheckList = false;
-        enemyManagement.dashList.Remove(this.gameObject);
-        gameObject.GetComponent<Renderer>().material.color = Color.black;
-        //Colliderでぶつかるまで～みたいな感じにしようとしたけど壁で囲まれてるわけじゃないから来週ぶつかるor一定時間経過でストップみたいなのにする
-        yield return new WaitForSeconds(3.0f);
+        Quaternion startRotation=transform.rotation;
+        Quaternion targetRotation = Quaternion.LookRotation(dashPosition - transform.position);
+        float rotationTime = 0.0f;
+        while(rotationTime<3.0f)
+        {
+            rotationTime+=Time.deltaTime;
+            float t = Mathf.Clamp01(rotationTime / 3.0f);
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            yield return null;
+        }
+
+        float moveTime = 0.0f;
+        while(moveTime<3.0f)
+        {
+            moveTime+=Time.deltaTime;
+            transform.Translate(Vector3.forward*dashSpeed*Time.deltaTime);
+            yield return null;
+
+            if(CheckCollision())
+            {
+                //突進中何かにぶつかったときの処理とか
+                isStop = true;
+                break;
+            }
+        }
         gameObject.GetComponent<Renderer>().material.color = Color.gray;
         isDash = false;
         SetWayPoint();
-        isForwardDashing = false;
         yield return new WaitForSeconds(2.0f);
+        enemyManagement.dashList.Remove(this.gameObject);
         gameObject.GetComponent<Renderer>().material.color = Color.blue;
+        isCoroutine = false;
         isCheckList = true;
 
     }
@@ -116,5 +129,10 @@ public class WanderEnemy : EnemyBase
         }
     }
 
+    private bool CheckCollision()
+    {
+        //突進してるときに何かにぶつかったら～っていう判定用
+        return false;
+    }
 
 }

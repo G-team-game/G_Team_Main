@@ -6,9 +6,11 @@ using UnityEngine;
 public class ChaseEnemy : EnemyBase
 {
     //player‚©‚ç‚Ç‚±‚Ü‚Å‚Ì”ÍˆÍ“à‚Åƒ‰ƒ“ƒ_ƒ€À•W‚ğŒˆ’è‚·‚é‚©
-    [SerializeField] protected float chasingMaxDistance = 15f;
+    [SerializeField] float chasingMaxDistance = 15f;
     //player‚©‚ç‚Ç‚Ì‹——£‚É“ü‚Á‚½‚ç’¼‚Å’Ç‚Á‚©‚¯‚é‚æ‚¤‚É‚·‚é‚©
-    [SerializeField] protected float chasingPlayerDistance = 3f;
+    [SerializeField] float chasingPlayerDistance = 3f;
+    //Player‚Æ‚Ç‚Ì‹——£ˆÈã‚É‚È‚Á‚½‚çÀ•W‚ğÄİ’è‚·‚é‚©
+    [SerializeField] float maxPlayerDistance = 15f;
     private Vector3 chasePosition;
     protected override void Start()
     {
@@ -17,10 +19,11 @@ public class ChaseEnemy : EnemyBase
     }
     protected override void Update()
     {
-        if (Vector3.Distance(transform.position, chasePosition) < 1f)
+        if (Vector3.Distance(transform.position, chasePosition) < 1f||Vector3.Distance(transform.position,chasePosition)>maxPlayerDistance)
         {
             GetRandomPositionNearPlayer();
         }
+
         if (Vector3.Distance(transform.position, playerTransform.position) < chasingPlayerDistance)
         {
             direction = (playerTransform.position - transform.position).normalized;
@@ -32,7 +35,7 @@ public class ChaseEnemy : EnemyBase
         base.Update();
     }
 
-    protected virtual void GetRandomPositionNearPlayer()
+    private void GetRandomPositionNearPlayer()
     {
         Vector3 playerPosition = playerTransform.position;
         Vector3 randomOffset = Random.insideUnitSphere * chasingMaxDistance;
