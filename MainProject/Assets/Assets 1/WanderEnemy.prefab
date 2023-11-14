@@ -208,7 +208,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8dbcc2d901bbeb498966014a4605f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  dashSpeed: 10
+  speed: 5
+  dashSpeed: 20
   rotationSpeed: 20
   wanderingDistance: 30
+  rotationTime: 2
+  dashTime: 5

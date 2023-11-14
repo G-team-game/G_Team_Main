@@ -13,6 +13,9 @@ public class WanderEnemy : EnemyBase
     private Vector3 dashPosition;
     //ƒ‰ƒ“ƒ_ƒ€À•W‚ğŒˆ’è‚·‚é‚Æ‚«‚Éenemy‚©‚ç‚Ç‚±‚Ü‚Å‚Ì”ÍˆÍ‚ÅÀ•W‚ğŒˆ‚ß‚é‚©
     [SerializeField] protected float wanderingDistance = 30f;
+
+    [SerializeField] float rotationTime = 2.0f;
+    [SerializeField] float dashTime = 5.0f;
     protected override void Start()
     {
         base.Start();
@@ -56,19 +59,19 @@ public class WanderEnemy : EnemyBase
     {
         Quaternion startRotation=transform.rotation;
         Quaternion targetRotation = Quaternion.LookRotation(dashPosition - transform.position);
-        float rotationTime = 0.0f;
-        while(rotationTime<3.0f)
+        float timeCount = 0.0f;
+        while(timeCount<rotationTime)
         {
-            rotationTime+=Time.deltaTime;
-            float t = Mathf.Clamp01(rotationTime / 3.0f);
+            timeCount+=Time.deltaTime;
+            float t = Mathf.Clamp01(timeCount / rotationTime);
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
             yield return null;
         }
 
-        float moveTime = 0.0f;
-        while(moveTime<3.0f)
+        timeCount = 0.0f;
+        while(timeCount<dashTime)
         {
-            moveTime+=Time.deltaTime;
+            timeCount+=Time.deltaTime;
             transform.Translate(Vector3.forward*dashSpeed*Time.deltaTime);
             yield return null;
 
