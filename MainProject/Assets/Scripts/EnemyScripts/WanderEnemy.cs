@@ -102,7 +102,7 @@ public class WanderEnemy : EnemyBase
     private Vector3 GenerateRandomPosition()
     {
         Vector3 randomDirection = Random.insideUnitSphere * wanderingDistance;
-        randomDirection += transform.position; // 現在の位置を起点にする
+        //randomDirection += transform.position; // 現在の位置を起点にする
         randomDirection.y = Mathf.Abs(randomDirection.y);
 
         // 確認する範囲の最小値と最大値を求める
@@ -134,7 +134,7 @@ public class WanderEnemy : EnemyBase
 
     private bool CheckCollision()
     {
-        //突進してるときに何かにぶつかったら～っていう判定用
+        //突進してるときに何かにぶつかったら～っていう判定用(まだ実装してない)
         return false;
     }
 

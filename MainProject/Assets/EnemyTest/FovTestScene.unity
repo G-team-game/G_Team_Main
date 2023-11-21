@@ -12563,8 +12563,8 @@ MonoBehaviour:
   wanderingEnemyPrefab: {fileID: 4137581206254706284, guid: bce23d27642d66f4499b595b7d1dc49a, type: 3}
   chasingEnemyPrefab: {fileID: 4137581206254706284, guid: 8f4d068b7d51f2d489ae714584fb7df5, type: 3}
   floatingEnemyPrefab: {fileID: 4137581206254706284, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
-  wanderingEnemyNumbers: 0
-  chasingEnemyNumbers: 10
+  wanderingEnemyNumbers: 5
+  chasingEnemyNumbers: 0
   floatingEnemyNumbers: 0
   wanderingEnemyName: WanderingEnemy
   chasingEnemyName: ChaseEnemy
