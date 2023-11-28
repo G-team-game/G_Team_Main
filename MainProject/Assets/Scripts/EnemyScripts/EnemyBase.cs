@@ -14,6 +14,7 @@ public class EnemyBase : MonoBehaviour
     protected Transform rangeB;
     protected LayerMask collisionLayer;
     protected EnemyManagement enemyManagement;
+    protected EnemyCollision collision;
 
     protected bool isDash = false;
 

@@ -11,8 +11,9 @@ public class WanderEnemy : EnemyBase
     bool isStop=false;
     private Vector3 wanderPosition;
     private Vector3 dashPosition;
+    private float raycastDistance=5f;
     //ランダム座標を決定するときにenemyからどこまでの範囲で座標を決めるか
-    [SerializeField] protected float wanderingDistance = 30f;
+    [SerializeField] protected float wanderingDistance = 10f;
 
     [SerializeField] float rotationTime = 2.0f;
     [SerializeField] float dashTime = 5.0f;
@@ -23,6 +24,17 @@ public class WanderEnemy : EnemyBase
     }
     protected override void Update()
     {
+        //Ray ray = new Ray(transform.position, transform.forward);
+        //RaycastHit hit;
+        //if (Physics.Raycast(ray, out hit, raycastDistance))
+        //{
+        //    Debug.Log("障害物が検出されました。");
+        //    Debug.Log(hit.collider.gameObject.name);
+        //    if(hit.collider.gameObject.name!="Player")
+        //    {
+        //        SetWayPoint();
+        //    }
+        //}
         if (isDash && !isCoroutine)
         {
             isCoroutine = true;
@@ -58,18 +70,18 @@ public class WanderEnemy : EnemyBase
     IEnumerator dashCoroutine()
     {
         Quaternion startRotation=transform.rotation;
-        Quaternion targetRotation = Quaternion.LookRotation(dashPosition - transform.position);
         float timeCount = 0.0f;
-        while(timeCount<rotationTime)
+        while(timeCount<rotationTime)//その場で止まってplayerが視界に入れた時の座標の方向く
         {
             timeCount+=Time.deltaTime;
             float t = Mathf.Clamp01(timeCount / rotationTime);
+            Quaternion targetRotation = Quaternion.LookRotation(playerTransform.position - transform.position);
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
             yield return null;
         }
 
         timeCount = 0.0f;
-        while(timeCount<dashTime)
+        while(timeCount<dashTime)//突っ込んでくる
         {
             timeCount+=Time.deltaTime;
             transform.Translate(Vector3.forward*dashSpeed*Time.deltaTime);
@@ -82,18 +94,18 @@ public class WanderEnemy : EnemyBase
                 break;
             }
         }
-        gameObject.GetComponent<Renderer>().material.color = Color.gray;
+        gameObject.GetComponent<Renderer>().material.color = Color.gray;//突進終わった後の待機時間的なの
         isDash = false;
         SetWayPoint();
         yield return new WaitForSeconds(2.0f);
-        enemyManagement.dashList.Remove(this.gameObject);
+        enemyManagement.dashList.Remove(this.gameObject);//リストから消して元の状態徘徊に戻す
         gameObject.GetComponent<Renderer>().material.color = Color.blue;
         isCoroutine = false;
         isCheckList = true;
 
     }
 
-    private void SetWayPoint()
+    private void SetWayPoint()//徘徊するときの位置決め
     {
         Vector3 randomPosition = GenerateRandomPosition();
         wanderPosition = randomPosition;
@@ -102,9 +114,17 @@ public class WanderEnemy : EnemyBase
     private Vector3 GenerateRandomPosition()
     {
         Vector3 randomDirection = Random.insideUnitSphere * wanderingDistance;
-        //randomDirection += transform.position; // 現在の位置を起点にする
         randomDirection.y = Mathf.Abs(randomDirection.y);
-
+        Vector3 newPosition = transform.position + randomDirection;
+        Vector3 rayStart = transform.position;
+        RaycastHit hit;
+        if(Physics.Raycast(rayStart,newPosition.normalized,out hit,wanderingDistance))
+        {
+            Debug.Log("再生成");
+            Debug.DrawRay(rayStart, newPosition * wanderingDistance, Color.red, 10.0f);
+            return GenerateRandomPosition();
+        }
+        //Debug.DrawRay(rayStart, newPosition * wanderingDistance, Color.red, 10.0f);
         // 確認する範囲の最小値と最大値を求める
         Vector3 minRange = new Vector3(
             Mathf.Min(rangeA.position.x, rangeB.position.x),
