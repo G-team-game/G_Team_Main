@@ -1,4 +1,3 @@
-//今はそのまま突っ込むけど壁とかにぶつかったら止まるようにする？
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +10,6 @@ public class WanderEnemy : EnemyBase
     bool isStop=false;
     private Vector3 wanderPosition;
     private Vector3 dashPosition;
-    private float raycastDistance=5f;
-    //ランダム座標を決定するときにenemyからどこまでの範囲で座標を決めるか
     [SerializeField] protected float wanderingDistance = 10f;
 
     [SerializeField] float rotationTime = 2.0f;
@@ -20,20 +17,17 @@ public class WanderEnemy : EnemyBase
     protected override void Start()
     {
         base.Start();
-        SetWayPoint();
+        wanderPosition= SetWayPoint();
     }
     protected override void Update()
     {
-        //Ray ray = new Ray(transform.position, transform.forward);
+        //Vector3 rayDirection = wanderPosition - transform.position;
+        //Ray ray = new Ray(transform.position, rayDirection);
         //RaycastHit hit;
-        //if (Physics.Raycast(ray, out hit, raycastDistance))
+        //if(Physics.Raycast(ray,out hit,Vector3.Distance(transform.position,wanderPosition)))
         //{
+        //    Debug.DrawRay(transform.position, rayDirection, Color.red);
         //    Debug.Log("障害物が検出されました。");
-        //    Debug.Log(hit.collider.gameObject.name);
-        //    if(hit.collider.gameObject.name!="Player")
-        //    {
-        //        SetWayPoint();
-        //    }
         //}
         if (isDash && !isCoroutine)
         {
@@ -49,7 +43,7 @@ public class WanderEnemy : EnemyBase
             }
             if (Vector3.Distance(transform.position, wanderPosition) < 1.0f)
             {
-                SetWayPoint();
+                wanderPosition= SetWayPoint();
             }
             direction = (wanderPosition - transform.position).normalized;
             base.Update();
@@ -105,26 +99,29 @@ public class WanderEnemy : EnemyBase
 
     }
 
-    private void SetWayPoint()//徘徊するときの位置決め
+    private Vector3 SetWayPoint()//徘徊するときの位置決め
     {
-        Vector3 randomPosition = GenerateRandomPosition();
-        wanderPosition = randomPosition;
+        Vector3 randomPosition;
+        while (true)
+        {
+            randomPosition = GenerateRandomPosition();
+            Vector3 rayDirection = randomPosition - transform.position;
+            Ray ray = new Ray(transform.position, rayDirection);
+            RaycastHit hit;
+            if (!Physics.Raycast(ray, out hit, Vector3.Distance(transform.position, randomPosition)))
+            {
+                Debug.DrawRay(transform.position, rayDirection, Color.red);
+                Debug.Log("障害物が検出されました。");
+                break;
+            }
+        }
+        return randomPosition;
 
     }
     private Vector3 GenerateRandomPosition()
     {
         Vector3 randomDirection = Random.insideUnitSphere * wanderingDistance;
         randomDirection.y = Mathf.Abs(randomDirection.y);
-        Vector3 newPosition = transform.position + randomDirection;
-        Vector3 rayStart = transform.position;
-        RaycastHit hit;
-        if(Physics.Raycast(rayStart,newPosition.normalized,out hit,wanderingDistance))
-        {
-            Debug.Log("再生成");
-            Debug.DrawRay(rayStart, newPosition * wanderingDistance, Color.red, 10.0f);
-            return GenerateRandomPosition();
-        }
-        //Debug.DrawRay(rayStart, newPosition * wanderingDistance, Color.red, 10.0f);
         // 確認する範囲の最小値と最大値を求める
         Vector3 minRange = new Vector3(
             Mathf.Min(rangeA.position.x, rangeB.position.x),
