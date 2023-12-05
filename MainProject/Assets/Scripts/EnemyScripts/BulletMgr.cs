@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletMgr : MonoBehaviour
 {
     public float moveSpeed = 10;
-  
+
     void Start()
     {
         //StartCoroutine(DestoryBullet());
@@ -13,12 +13,12 @@ public class BulletMgr : MonoBehaviour
 
     private void Update()
     {
-      
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag== "Enemy")
+        if (other.gameObject.tag == "Enemy")
         {
             Debug.Log("Enemy Hit");
             other.gameObject.SetActive(false);

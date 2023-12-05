@@ -5,27 +5,27 @@ using UnityEngine;
 public class EnemySpawn : MonoBehaviour
 {
     public static EnemySpawn Instance;
-    //[SerializeField] GameObject EnemyPrefab;//œŠO
-    [SerializeField] private WaveData wavedata;//’Ç‰Á
+    //[SerializeField] GameObject EnemyPrefab;//ï¿½ï¿½ï¿½O
+    [SerializeField] private WaveData wavedata;//ï¿½Ç‰ï¿½
 
     //[SerializeField] int EnemySpawnNumbers=5;
-    [SerializeField] int ChaseEnemyNumbers=3;
-    [SerializeField] int DashEnemyNumbers=1;
+    [SerializeField] int ChaseEnemyNumbers = 3;
+    [SerializeField] int DashEnemyNumbers = 1;
     [SerializeField] float DashSelectTime = 5f;
     private float timeCount;
-    
+
     //[SerializeField] private WaveData waveData;
 
     //[SerializeField] Transform[] SpawnPoints;
-    
 
-    [SerializeField] List<GameObject> SpawnList=new List<GameObject>();
-    [SerializeField] List<GameObject> ChaseList=new List<GameObject>();
-    [SerializeField] public List<GameObject> DashList=new List<GameObject>();
+
+    [SerializeField] List<GameObject> SpawnList = new List<GameObject>();
+    [SerializeField] List<GameObject> ChaseList = new List<GameObject>();
+    [SerializeField] public List<GameObject> DashList = new List<GameObject>();
     private int prefabcount;
-    [SerializeField] public WaveManager wavemanager;
+    // [SerializeField] public WaveManager wavemanager;
 
-    private void Awake()//ƒVƒ“ƒOƒ‹ƒgƒ“‚Å‚â‚Á‚Ä‚İ‚½‚Á‚ÄŠ´‚¶‚Å‚·B
+    private void Awake()//ï¿½Vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½Ä‚İ‚ï¿½ï¿½ï¿½ï¿½ÄŠï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B
     {
         //int i = waveData.wave;
 
@@ -45,7 +45,7 @@ public class EnemySpawn : MonoBehaviour
         //{
         //    DashEnemyNumbers = EnemySpawnNumbers - ChaseEnemyNumbers;
         //}
-            
+
         //StartSpawnEney();
         //SelectChaseEnemy();
     }
@@ -53,41 +53,41 @@ public class EnemySpawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timeCount+=Time.deltaTime;//‚±‚±‚Ìƒ‹[ƒvˆ—InvokeRepeating‚É•Ï‚¦‚æ‚¤‚©‚È[‚Á‚ÄŠ´‚¶‚Å‚·B
-        if (timeCount>=DashSelectTime)
+        timeCount += Time.deltaTime;//ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½ï¿½InvokeRepeatingï¿½É•Ï‚ï¿½ï¿½æ‚¤ï¿½ï¿½ï¿½È[ï¿½ï¿½ï¿½ÄŠï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B
+        if (timeCount >= DashSelectTime)
         {
             SelectDashEnemy();
-            timeCount=0;
+            timeCount = 0;
         }
-        
+
     }
 
-    public void StartSpawnEney()//ƒQ[ƒ€ƒXƒ^[ƒg‚Éo‚·‚Æ‚«‚Ég‚¤
-    {
-        for (int i=0;i<wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints.Length;i++)
-        {
-            //int randomIndex = Random.Range(0, SpawnPoints.Length);
-            int randomIndex = Random.Range(0, wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints.Length);//’Ç‰Á
-            //Transform spawnPoint = SpawnPoints[randomIndex];
-            Transform spawnPoint = wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints[randomIndex];//’Ç‰Á
-            //GameObject newEnemy = Instantiate(EnemyPrefab, spawnPoint.position, Quaternion.identity);
-            GameObject newEnemy = Instantiate(wavedata.wave[wavemanager.Wavecount-1].enemylist[0].enemytype, spawnPoint.position, Quaternion.identity);//’Ç‰Á
-            newEnemy.name = "Enemy"+(prefabcount+1);
-            SpawnList.Add(newEnemy);
-            prefabcount++;
-        }
-    }
-    public void SpawnEnemy()//ŠÔ‚²‚Æ‚Éƒ‰ƒ“ƒ_ƒ€ˆÊ’u‚ÉƒXƒ|[ƒ“‚³‚¹‚é‚È‚çg‚¤
-    {
-        //int randomIndex = Random.Range(0, SpawnPoints.Length);
-        int randomIndex = Random.Range(0, wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints.Length);//’Ç‰Á
-        //Vector3 spawnPosition = SpawnPoints[randomIndex].position;
-        Vector3 spawnPosition = wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints[randomIndex].position;//’Ç‰Á
-        //Instantiate(EnemyPrefab, spawnPosition, Quaternion.identity);
-        Instantiate(wavedata.wave[wavemanager.Wavecount-1].enemylist[0].enemytype, spawnPosition, Quaternion.identity);
-    }
+    // public void StartSpawnEney()//ï¿½Qï¿½[ï¿½ï¿½ï¿½Xï¿½^ï¿½[ï¿½gï¿½ï¿½ï¿½Éoï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Égï¿½ï¿½
+    // {
+    //     for (int i=0;i<wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints.Length;i++)
+    //     {
+    //         //int randomIndex = Random.Range(0, SpawnPoints.Length);
+    //         int randomIndex = Random.Range(0, wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints.Length);//ï¿½Ç‰ï¿½
+    //         //Transform spawnPoint = SpawnPoints[randomIndex];
+    //         Transform spawnPoint = wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints[randomIndex];//ï¿½Ç‰ï¿½
+    //         //GameObject newEnemy = Instantiate(EnemyPrefab, spawnPoint.position, Quaternion.identity);
+    //         GameObject newEnemy = Instantiate(wavedata.wave[wavemanager.Wavecount-1].enemylist[0].enemytype, spawnPoint.position, Quaternion.identity);//ï¿½Ç‰ï¿½
+    //         newEnemy.name = "Enemy"+(prefabcount+1);
+    //         SpawnList.Add(newEnemy);
+    //         prefabcount++;
+    //     }
+    // }
+    // public void SpawnEnemy()//ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½Æ‚Éƒï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Ê’uï¿½ÉƒXï¿½|ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½gï¿½ï¿½
+    // {
+    //     //int randomIndex = Random.Range(0, SpawnPoints.Length);
+    //     int randomIndex = Random.Range(0, wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints.Length);//ï¿½Ç‰ï¿½
+    //     //Vector3 spawnPosition = SpawnPoints[randomIndex].position;
+    //     Vector3 spawnPosition = wavedata.wave[wavemanager.Wavecount-1].spawnlist[0].SpawnPoints[randomIndex].position;//ï¿½Ç‰ï¿½
+    //     //Instantiate(EnemyPrefab, spawnPosition, Quaternion.identity);
+    //     Instantiate(wavedata.wave[wavemanager.Wavecount-1].enemylist[0].enemytype, spawnPosition, Quaternion.identity);
+    // }
 
-    public void SelectChaseEnemy()//ƒXƒ|[ƒ“‚³‚¹‚½enemy‚©‚ç’Ç‚Á‚©‚¯‚é‚â‚Â‚ğ‘I‚Ô
+    public void SelectChaseEnemy()//ï¿½Xï¿½|ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½enemyï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½Iï¿½ï¿½
     {
         List<GameObject> selectedEnemies = new List<GameObject>(SpawnList);
         int count = Mathf.Min(ChaseEnemyNumbers, selectedEnemies.Count);
@@ -117,9 +117,9 @@ public class EnemySpawn : MonoBehaviour
     {
         DashList.Clear();
         List<int> selectedDash = new List<int>();
-        for(int i=0;i<SpawnList.Count;i++)
+        for (int i = 0; i < SpawnList.Count; i++)
             selectedDash.Add(i);
-        for(int i=0;i<DashEnemyNumbers;i++)
+        for (int i = 0; i < DashEnemyNumbers; i++)
         {
             int randomIndex = Random.Range(0, selectedDash.Count);
             int selectedIndex = selectedDash[randomIndex];
@@ -127,6 +127,6 @@ public class EnemySpawn : MonoBehaviour
             selectedDash.RemoveAt(randomIndex);
             Debug.Log(SpawnList[selectedIndex]);
         }
-        
+
     }
 }

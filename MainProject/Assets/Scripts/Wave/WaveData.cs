@@ -6,30 +6,24 @@ using System;
 [CreateAssetMenu]
 public class WaveData : ScriptableObject
 {
-	public int waves;
-	public GameObject Item;
+	public int stageId;
 	public List<wave> wave = new List<wave>();
-
 }
 
 [Serializable]
 public class wave
 {
+	public Transform spawnItemPosition;
+	public ItemScript spwanItem;
+	public Transform spawnPoints;
 	public List<enemy> enemylist = new List<enemy>();
-	public List<spawn> spawnlist = new List<spawn>();
-	//[SerializeField] public Transform[] SpawnPoints;
 
 	[Serializable]
 	public class enemy
 	{
 		public int id;
-		public GameObject enemytype;
-
-	}
-	[Serializable]
-	public class spawn
-	{
-		public Transform[] SpawnPoints;
+		public EnemyBase enemyObject;
+		public string enemyName;
 	}
 
 }

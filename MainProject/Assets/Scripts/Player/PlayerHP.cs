@@ -8,24 +8,19 @@ public class PlayerHP : MonoBehaviour
     public PlayerHealth playerHealth;
     public int hp = 100;
     private int maxHp = 0;
-    private  int lastHP;
+    private int lastHP;
     public float addTimer = 5;
     bool isAdd = false;
 
     public GameObject panel;
 
     float addhpTimer = 1;
-    public int addHPValue=3;
+    public int addHPValue = 3;
     public float addHpTimerValue = 2;
 
     private void Awake()
     {
-        maxHp = hp;        
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        maxHp = hp;
     }
 
     // Update is called once per frame
@@ -33,7 +28,7 @@ public class PlayerHP : MonoBehaviour
     {
         addTimer -= Time.deltaTime;
 
-        if(addTimer<=0)
+        if (addTimer <= 0)
         {
             isAdd = true;
         }
@@ -60,25 +55,17 @@ public class PlayerHP : MonoBehaviour
     {
         isAdd = false;
         addTimer = 5;
-          if (hp-atk<=0)
+        if (hp - atk <= 0)
         {
             //Game Over
             panel.SetActive(true);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
         }
-          else
-        {          
+        else
+        {
             playerHealth.UpdateReduceHP(hp - atk, maxHp, hp);
             hp = hp - atk;
         }
-    }
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-    public void LoadStart()
-    {
-       SceneManager.LoadScene(0);
     }
 }

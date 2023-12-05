@@ -11,12 +11,12 @@ public class WanderEnemy : EnemyBase
         base.Start();
         SetWayPoint();
     }
+
     protected override void Update()
     {
         if (isWaiting)
         {
-            transform.Translate(Vector3.forward*dashSpeed*Time.deltaTime);
-            Debug.Log("ë“ã@íÜÅc");
+            transform.Translate(Vector3.forward * dashSpeed * Time.deltaTime);
         }
         else
         {
@@ -30,7 +30,7 @@ public class WanderEnemy : EnemyBase
             }
             else
             {
-                if (CheckDashList(this.gameObject)&&isCheckList)
+                if (_enemyState == EnemyState.tracking && isCheckList)
                 {
                     StartDashTowardsPlayer();
                 }
@@ -44,11 +44,6 @@ public class WanderEnemy : EnemyBase
         }
     }
 
-    private bool CheckDashList(GameObject obj)
-    {
-        return enemyManagement.dashList.Contains(obj);
-    }
-
     private void StartDashTowardsPlayer()
     {
         isDash = true;
@@ -59,7 +54,7 @@ public class WanderEnemy : EnemyBase
     {
         isWaiting = true;
         isCheckList = false;
-        enemyManagement.dashList.Remove(this.gameObject);
+        _enemyState = EnemyState.wander;
         gameObject.GetComponent<Renderer>().material.color = Color.black;
         yield return new WaitForSeconds(1.0f);
         gameObject.GetComponent<Renderer>().material.color = Color.gray;

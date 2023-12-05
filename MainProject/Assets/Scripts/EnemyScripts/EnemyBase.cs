@@ -1,11 +1,19 @@
-//メモ
-//ランダムで座標決めるときに壁とかにめり込まないようにRayCast使う？
-//ランダム座標決めるときに地面に埋まんない用にY座標正にしてたけどステージによって変えたほうがいい?
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum EnemyState
+{
+    idle,
+    wander,
+    tracking,
+    restraint,
+}
+public enum EnemyType
+{
+    normal,
+    tracking,
+    dash,
+}
 public class EnemyBase : MonoBehaviour
 {
     [SerializeField] protected float speed = 3f;
@@ -14,7 +22,11 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected float wanderingDistance = 30f;
     [SerializeField] protected float chasingMaxDistance = 15f;
     [SerializeField] protected float chasingPlayerDistance = 3f;
+    [SerializeField] private EnemyType enemyType;
+    public EnemyType getEnemyType { get { return enemyType; } private set { enemyType = value; } }
 
+    [SerializeField] private EnemyState enemyState;
+    public EnemyState _enemyState { get { return enemyState; } set { enemyState = value; } }
     protected Transform playerTransform;
     protected Vector3 wanderPosition;
     protected Vector3 chasePosition;
@@ -25,12 +37,11 @@ public class EnemyBase : MonoBehaviour
 
     protected LayerMask collisionLayer;
     protected EnemyManagement enemyManagement;
-
     protected bool isDash = false;
 
     protected virtual void Start()
     {
-        enemyManagement=EnemyManagement.Instance;
+        enemyManagement = EnemyManagement.Instance;
         if (enemyManagement == null)
         {
             Debug.LogError("EnemyManager not found.");
@@ -43,6 +54,8 @@ public class EnemyBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (enemyState == EnemyState.restraint) return;
+
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         if (isDash)
@@ -54,35 +67,15 @@ public class EnemyBase : MonoBehaviour
     protected virtual void SetWayPoint()
     {
         Vector3 randomPosition = GenerateRandomPosition();
-        //Debug.Log("Random Position: " + randomPosition + this.gameObject.name);
         wanderPosition = randomPosition;
-
     }
-    private Vector3 GenerateRandomPosition()//座標決定用
+
+    private Vector3 GenerateRandomPosition()
     {
-        //float minX = Mathf.Min(rangeA.position.x, rangeB.position.x);
-        //float maxX = Mathf.Max(rangeA.position.x, rangeB.position.x);
-
-        //float minY = Mathf.Min(rangeA.position.y, rangeB.position.y);
-        //float maxY = Mathf.Max(rangeA.position.y, rangeB.position.y);
-
-        //float minZ = Mathf.Min(rangeA.position.z, rangeB.position.z);
-        //float maxZ = Mathf.Max(rangeA.position.z, rangeB.position.z);
-
-        //float randomX = Random.Range(minX, maxX);
-        //float randomY = Random.Range(minY, maxY);
-        //float randomZ = Random.Range(minZ, maxZ);
-        //Vector3 randomDirection = new Vector3(randomX, randomY, randomZ);
-        //return randomDirection;
-
-        //今は下のenemyからある程度の距離(wanderingDistance)の間でランダムで目的地設定しています。
-        //上でコメントアウトしてるのがステージ上のrangeAとrangeBの間で完全ランダムで決まる方です。
-        //一応どっちも使うかもしれないので残してます。
         Vector3 randomDirection = Random.insideUnitSphere * wanderingDistance;
-        randomDirection += transform.position; // 現在の位置を起点にする
+        randomDirection += transform.position;
         randomDirection.y = Mathf.Abs(randomDirection.y);
 
-        // 確認する範囲の最小値と最大値を求める
         Vector3 minRange = new Vector3(
             Mathf.Min(rangeA.position.x, rangeB.position.x),
             Mathf.Min(rangeA.position.y, rangeB.position.y),
@@ -95,33 +88,32 @@ public class EnemyBase : MonoBehaviour
             Mathf.Max(rangeA.position.z, rangeB.position.z)
         );
 
-        // 範囲内にランダムな座標があるか確認する
         if (randomDirection.x >= minRange.x && randomDirection.x <= maxRange.x &&
             randomDirection.y >= minRange.y && randomDirection.y <= maxRange.y &&
             randomDirection.z >= minRange.z && randomDirection.z <= maxRange.z)
         {
-            return randomDirection; // 範囲内の場合はそのまま返す
+            return randomDirection;
         }
         else
         {
-            // 範囲外の場合は再度生成する
             return GenerateRandomPosition();
         }
     }
-    protected virtual void GetRandomPositionNearPlayer()//追跡
+
+    protected virtual void GetRandomPositionNearPlayer()
     {
         Vector3 playerPosition = playerTransform.position;
         Vector3 randomOffset = Random.insideUnitSphere * chasingMaxDistance;
         Vector3 randomposition = playerPosition + randomOffset;
         if (randomposition.y < 0)
         {
-            randomposition.y = Mathf.Abs(randomposition.y);//地面より下に行っちゃわないようにy座標を正に
+            randomposition.y = Mathf.Abs(randomposition.y);
         }
         Collider[] colliders = Physics.OverlapSphere(randomposition, chasingMaxDistance, collisionLayer);
         if (colliders.Length > 0)
         {
-            GetRandomPositionNearPlayer();//もう一回ランダム生成
+            GetRandomPositionNearPlayer();
         }
-        chasePosition= randomposition;
+        chasePosition = randomposition;
     }
 }

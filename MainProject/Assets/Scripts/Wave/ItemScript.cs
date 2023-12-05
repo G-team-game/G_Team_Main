@@ -1,25 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ItemScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private bool isSuccess;
+    private MenuInput menuInput;
+
     void Start()
     {
-        
+        menuInput = GameObject.Find("menu").GetComponent<MenuInput>();
     }
-    private void OnCollisionEnter(Collision collision)
+
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
+            if (menuInput != null)
+            {
+                if (isSuccess)
+                {
+                    menuInput.Success();
+                }
+                else
+                {
+                    menuInput.GameOver();
+                }
+            }
+
             Destroy(gameObject);
         }
     }
 
-        // Update is called once per frame
-        void Update()
-    {
-        
-    }
+    // public void WaveItem(WaveModel waveModel)
+    // {
+    //     this.waveModel = waveModel;
+    // }
 }

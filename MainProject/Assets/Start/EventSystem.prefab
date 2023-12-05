@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &36164628230095673
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5127979939398488651}
+  - component: {fileID: 7850442741386340792}
+  - component: {fileID: 7469272240481158771}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5127979939398488651
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36164628230095673}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 31.42141, y: 353.4073, z: 1.9421918}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7850442741386340792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36164628230095673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+  m_PlayerRoot: {fileID: 0}
+--- !u!114 &7469272240481158771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36164628230095673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_PointAction: {fileID: -6476783622161664549, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_MoveAction: {fileID: -3730842972916846367, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_SubmitAction: {fileID: -5061850730555190385, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_CancelAction: {fileID: 1697996232860718093, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_LeftClickAction: {fileID: -2929883630075682513, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_MiddleClickAction: {fileID: 5995151616126835219, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_RightClickAction: {fileID: 2056995432583812098, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_ScrollWheelAction: {fileID: 1167300388877922835, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_TrackedDevicePositionAction: {fileID: -934991766801621510, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: -7759994580043974390, guid: 87911c7db34b64b7b8bdf134d87db525, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d1b1a9d7708d4807a57a5dc077e9e6b, type: 3}
+  m_Name: wave
+  m_EditorClassIdentifier: 
+  stageId: 0
+  wave:
+  - spawnItemPosition: {fileID: 9175553479684521600, guid: dfcafebd9467d45b1946594755e6875e, type: 3}
+    spwanItem: {fileID: 8745663446777219905, guid: 688b5b6d515f74cf79036995a0d02535, type: 3}
+    spawnPoints: {fileID: 2578213322349516744, guid: bc03c20b5880b4c8f8b985be9e6c7e94, type: 3}
+    enemylist:
+    - id: 0
+      enemyObject: {fileID: 5216994651234568980, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+      enemyName: 
+    - id: 1
+      enemyObject: {fileID: 5216994651234568980, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+      enemyName: 
+    - id: 2
+      enemyObject: {fileID: 5216994651234568980, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+      enemyName: 
+    - id: 3
+      enemyObject: {fileID: 5216994651234568980, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+      enemyName: 
+    - id: 4
+      enemyObject: {fileID: 3800958190703512372, guid: 8f4d068b7d51f2d489ae714584fb7df5, type: 3}
+      enemyName: 

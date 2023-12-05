@@ -1,34 +1,36 @@
 using System.Collections;
 using UnityEngine;
-
+using System.Linq;
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] float speed = 3f;//ƒXƒs[ƒh
-    [SerializeField] float rotationSpeed = 5f;//ù‰ñƒXƒs[ƒh(‚±‚±‚Ì’l‚ªdashspeed‚Æ—£‚ê‚·‚¬‚Ä‚é‚ÆƒvƒŒƒCƒ„[‚Ìü‚èƒOƒ‹ƒOƒ‹Œ»Û‹N‚«‚â‚·‚­‚È‚è‚Ü‚·B)
-    [SerializeField] private float dashSpeed = 10f;//ƒ_ƒbƒVƒ…‚ÌƒXƒs[ƒh
-    //[SerializeField] float DistanceFromAB = 10f;g‚Á‚Ä‚È‚¢‚Ì‚Åˆê’UÁ‚µ
-    [SerializeField] float wanderingDistance = 30f;//ƒ‰ƒ“ƒ_ƒ€‚ÅˆÚ“®‚·‚é‚Æ‚«‚Éenemy‚©‚ç‚Ì‹——£“à‚Å¶¬‚·‚é‚½‚ß‚Ì‚â‚Â
-    [SerializeField] float chasingMaxDistance = 15f;//’ÇÕˆ—’†‚Éƒ‰ƒ“ƒ_ƒ€‚ÅÀ•Ww’è‚·‚é‚Æ‚«‚ÌƒvƒŒƒCƒ„[‚©‚ç‚Ì‹——£
-    [SerializeField] float playerChaseDistance = 3f;//ƒvƒŒƒCƒ„[‚ğ’¼‚Å’Ç‚Á‚©‚¯‚éƒ‚[ƒh‚ÉˆÚs‚·‚é‚Æ‚«‚Ì‹——£ 
+    [SerializeField] float speed = 3f;
+    [SerializeField] float rotationSpeed = 5f;
+    [SerializeField] private float dashSpeed = 10f;
+    [SerializeField] float wanderingDistance = 30f;
+    [SerializeField] float chasingMaxDistance = 15f;
+    [SerializeField] float playerChaseDistance = 3f;
 
-    private Transform player; // ƒvƒŒƒCƒ„[‚ÌˆÊ’u
-    private Vector3 targetPosition; // Œ»İ‚Ì–Ú“I’n
+    private Transform player;
+    private Vector3 targetPosition;
     private Vector3 dashTarget;
-    private bool isChasing = false; // ’ÇÕƒ‚[ƒh‚©‚Ç‚¤‚©
+    private bool isChasing = false;
     private bool isDashing = false;
     private Transform rangeA;
     private Transform rangeB;
 
-    private LayerMask collisionLayer; // Õ“Ë”»’è‚ğs‚¤ƒŒƒCƒ„[ƒ}ƒXƒN
+    private LayerMask collisionLayer;
     private Vector3 ChasingRandomPosition;
 
     public EnemyManagement enemyManagement;
+    private EnemyBase enemyBase;
 
     private void Start()
     {
         rangeA = GameObject.Find("ChaseRangeA").transform;
         rangeB = GameObject.Find("ChaseRangeB").transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        enemyBase = GetComponent<EnemyBase>();
 
         enemyManagement = EnemyManagement.Instance;
         if (enemyManagement == null)
@@ -38,7 +40,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (!isChasing)
             SetWayPoint();
-        else if(isChasing)
+        else if (isChasing)
             ChasingRandomPosition = GetRandomPositionNearPlayer();
     }
 
@@ -48,7 +50,7 @@ public class EnemyMovement : MonoBehaviour
         if (isDashing)
         {
             EnemyDash();
-            if(!CheckDashList(this.gameObject))
+            if (!CheckDashList())
             {
                 isDashing = false;
             }
@@ -62,7 +64,6 @@ public class EnemyMovement : MonoBehaviour
                     ChasingRandomPosition = GetRandomPositionNearPlayer();
                 }
 
-                //Debug.Log(ChasingRandomPosition);
                 if (Vector3.Distance(transform.position, player.position) < playerChaseDistance)
                 {
                     direction = (player.position - transform.position).normalized;
@@ -77,9 +78,9 @@ public class EnemyMovement : MonoBehaviour
 
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
-            else if (!isChasing)// œpœj‚·‚éˆ—
+            else if (!isChasing)
             {
-                if (CheckDashList(this.gameObject))
+                if (CheckDashList())
                 {
                     StartDashTowardsPlayer();
                 }
@@ -104,48 +105,30 @@ public class EnemyMovement : MonoBehaviour
         Vector3 randomposition = playerPosition + randomOffset;
         if (randomposition.y < 0)
         {
-            randomposition.y = Mathf.Abs(randomposition.y);//’n–Ê‚æ‚è‰º‚És‚Á‚¿‚á‚í‚È‚¢‚æ‚¤‚ÉyÀ•W‚ğ³‚É
+            randomposition.y = Mathf.Abs(randomposition.y);//ï¿½nï¿½Ê‚ï¿½è‰ºï¿½Ésï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½ï¿½yï¿½ï¿½ï¿½Wï¿½ğ³‚ï¿½
         }
         Collider[] colliders = Physics.OverlapSphere(randomposition, chasingMaxDistance, collisionLayer);
-        if(colliders.Length>0)
+        if (colliders.Length > 0)
         {
-            return GetRandomPositionNearPlayer();//‚à‚¤ˆê‰ñƒ‰ƒ“ƒ_ƒ€¶¬
+            return GetRandomPositionNearPlayer();//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñƒ‰ƒï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         }
         return randomposition;
     }
+
     private void SetWayPoint()
     {
         Vector3 randomPosition = GenerateRandomPosition();
-        Debug.Log("Random Position: " + randomPosition+this.gameObject.name);//ƒ‰ƒ“ƒ_ƒ€À•WŠm”F—p
+        Debug.Log("Random Position: " + randomPosition + this.gameObject.name);//ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½mï¿½Fï¿½p
         targetPosition = randomPosition;
-
     }
 
     private Vector3 GenerateRandomPosition()
     {
-        //float minX = Mathf.Min(rangeA.position.x, rangeB.position.x);
-        //float maxX = Mathf.Max(rangeA.position.x, rangeB.position.x);
-
-        //float minY = Mathf.Min(rangeA.position.y, rangeB.position.y);
-        //float maxY = Mathf.Max(rangeA.position.y, rangeB.position.y);
-
-        //float minZ = Mathf.Min(rangeA.position.z, rangeB.position.z);
-        //float maxZ = Mathf.Max(rangeA.position.z, rangeB.position.z);
-
-        //float randomX = Random.Range(minX, maxX);
-        //float randomY = Random.Range(minY, maxY);
-        //float randomZ = Random.Range(minZ, maxZ);
-        //Vector3 randomDirection = new Vector3(randomX, randomY, randomZ);
-        //return randomDirection;
-
-        //¡‚Í‰º‚Ìenemy‚©‚ç‚ ‚é’ö“x‚Ì‹——£(wanderingDistance)‚ÌŠÔ‚Åƒ‰ƒ“ƒ_ƒ€‚Å–Ú“I’nİ’è‚µ‚Ä‚¢‚Ü‚·B
-        //ã‚ÅƒRƒƒ“ƒgƒAƒEƒg‚µ‚Ä‚é‚Ì‚ªƒXƒe[ƒWã‚ÌrangeA‚ÆrangeB‚ÌŠÔ‚ÅŠ®‘Sƒ‰ƒ“ƒ_ƒ€‚ÅŒˆ‚Ü‚é•û‚Å‚·B
-        //ˆê‰‚Ç‚Á‚¿‚àg‚¤‚©‚à‚µ‚ê‚È‚¢‚Ì‚Åc‚µ‚Ä‚Ü‚·B
         Vector3 randomDirection = Random.insideUnitSphere * wanderingDistance;
-        randomDirection += transform.position; // Œ»İ‚ÌˆÊ’u‚ğ‹N“_‚É‚·‚é
-        randomDirection.y = Mathf.Abs(randomDirection.y); //’n–Ê‚É–„‚Ü‚Á‚¿‚á‚¤‚Ì‚ÅyÀ•W‚ğ³‚É
+        randomDirection += transform.position; // ï¿½ï¿½ï¿½İ‚ÌˆÊ’uï¿½ï¿½ï¿½Nï¿½_ï¿½É‚ï¿½ï¿½ï¿½
+        randomDirection.y = Mathf.Abs(randomDirection.y); //ï¿½nï¿½Ê‚É–ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½á‚¤ï¿½Ì‚ï¿½yï¿½ï¿½ï¿½Wï¿½ğ³‚ï¿½
 
-        // Šm”F‚·‚é”ÍˆÍ‚ÌÅ¬’l‚ÆÅ‘å’l‚ğ‹‚ß‚é
+        // ï¿½mï¿½Fï¿½ï¿½ï¿½ï¿½ÍˆÍ‚ÌÅï¿½ï¿½lï¿½ÆÅ‘ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½
         Vector3 minRange = new Vector3(
             Mathf.Min(rangeA.position.x, rangeB.position.x),
             Mathf.Min(rangeA.position.y, rangeB.position.y),
@@ -158,36 +141,34 @@ public class EnemyMovement : MonoBehaviour
             Mathf.Max(rangeA.position.z, rangeB.position.z)
         );
 
-        // ”ÍˆÍ“à‚Éƒ‰ƒ“ƒ_ƒ€‚ÈÀ•W‚ª‚ ‚é‚©Šm”F‚·‚é
+        // ï¿½ÍˆÍ“ï¿½ï¿½Éƒï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Èï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½mï¿½Fï¿½ï¿½ï¿½ï¿½
         if (randomDirection.x >= minRange.x && randomDirection.x <= maxRange.x &&
             randomDirection.y >= minRange.y && randomDirection.y <= maxRange.y &&
             randomDirection.z >= minRange.z && randomDirection.z <= maxRange.z)
         {
-            return randomDirection; // ”ÍˆÍ“à‚Ìê‡‚Í‚»‚Ì‚Ü‚Ü•Ô‚·
+            return randomDirection; // ï¿½ÍˆÍ“ï¿½ï¿½Ìê‡ï¿½Í‚ï¿½ï¿½Ì‚Ü‚Ü•Ô‚ï¿½
         }
         else
         {
-            // ”ÍˆÍŠO‚Ìê‡‚ÍÄ“x¶¬‚·‚é
+            // ï¿½ÍˆÍŠOï¿½Ìê‡ï¿½ÍÄ“xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             return GenerateRandomPosition();
         }
     }
 
-    private bool CheckDashList(GameObject obj)
+    private bool CheckDashList()
     {
-        return enemyManagement.dashList.Contains(obj);
+        return enemyBase.getEnemyType == EnemyType.dash;
     }
+
     private void StartDashTowardsPlayer()
     {
         isDashing = true;
         dashTarget = player.position;
-        Debug.Log("ƒ_ƒbƒVƒ…–Ú“I’n" + dashTarget + this.gameObject.name);
+        Debug.Log("ï¿½_ï¿½bï¿½Vï¿½ï¿½ï¿½Ú“Iï¿½n" + dashTarget + this.gameObject.name);
     }
 
     private void EnemyDash()
     {
-        //float step = dashSpeed * Time.deltaTime;
-        //transform.position = Vector3.MoveTowards(transform.position, dashTarget, step);
-        //Vector3 direction = (player.position - transform.position).normalized;
         Vector3 direction = (dashTarget - transform.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
@@ -196,12 +177,13 @@ public class EnemyMovement : MonoBehaviour
         if (Vector3.Distance(transform.position, dashTarget) < 1.0f)
         {
             isDashing = false;
-            enemyManagement.dashList.Remove(this.gameObject);
+            //enemyManagement.dashList.Remove(this.gameObject);
+            enemyBase._enemyState = EnemyState.wander;
         }
     }
-    
 
-    public void EnemyChaseSetActive()//EnemySpawn‘¤‚©‚çŒÄ‚Ño‚µ‚Ä’ÇÕƒ‚[ƒhtrue‚É‚·‚é‚æ[‚Á‚Ä‚â‚Â‚Å‚·B
+
+    public void EnemyChaseSetActive()//EnemySpawnï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½Ä’ÇÕƒï¿½ï¿½[ï¿½htrueï¿½É‚ï¿½ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ä‚ï¿½Â‚Å‚ï¿½ï¿½B
     {
         isChasing = true;
         //Debug.Log("Active!" + isChasing);

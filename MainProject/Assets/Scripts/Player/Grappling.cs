@@ -1,11 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Grappling : MonoBehaviour
 {
     [Header("References")]
-    private PlayerMovement pm;
+    private PlayerMove pm;
     public Transform cam;
     public Transform gunTip;
     public LayerMask whatIsGrappleable;
@@ -22,41 +21,43 @@ public class Grappling : MonoBehaviour
     public float grapplingCd;
     private float grapplingCdTimer;
 
-    [Header("Input")]
-    public KeyCode grappleKey = KeyCode.Mouse1;
+    [Header("Scale")]
+    public float scale;
+    [Header("Camera")]
+    [SerializeField] private PlayerCam playerCam;
 
     private bool grappling;
 
     public bool isEnemy;
 
+    private EnemyBase targetEnemy;
+
     private void Start()
     {
         isEnemy = false;
-        pm = GetComponent<PlayerMovement>();
+        pm = GetComponent<PlayerMove>();
     }
 
-    private void Update()
+    public void PlayerShot()
     {
-        // if (!UIMgr.Instance.isFire)
-        // {
-        if (Input.GetKeyDown(grappleKey)) StartGrapple();
+        StartGrapple();
+    }
 
+    void Update()
+    {
         if (grapplingCdTimer > 0)
             grapplingCdTimer -= Time.deltaTime;
-        // }
-
     }
 
-    private void LateUpdate()
-    {
-        // if (grappling)
-        // lr.SetPosition(0, gunTip.position);
-    }
 
     private void StartGrapple()
     {
+        if (grapplingCdTimer > 0)
+        {
+            return;
+        }
 
-        if (grapplingCdTimer > 0) return;
+        playerCam.CameraShake(false);
 
         grappling = true;
 
@@ -68,25 +69,21 @@ public class Grappling : MonoBehaviour
             if (hit.collider.gameObject.tag == "Enemy")
             {
                 isEnemy = true;
-                Debug.Log("Enemy");
 
-                StopFie(hit.collider.gameObject);
-
+                targetEnemy = hit.collider.GetComponent<EnemyBase>();
+                targetEnemy._enemyState = EnemyState.restraint;
             }
+
             grapplePoint = hit.point;
 
             Invoke(nameof(ExecuteGrapple), grappleDelayTime);
-
         }
         else
         {
             grapplePoint = cam.position + cam.forward * maxGrappleDistance;
 
-            Invoke(nameof(StopGrapple), grappleDelayTime);
+            Invoke(nameof(StopGrapple), 0.1f);
         }
-
-        // lr.enabled = true;
-        // lr.SetPosition(0, grapplePoint);
     }
 
     private void ExecuteGrapple()
@@ -99,13 +96,7 @@ public class Grappling : MonoBehaviour
         float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
 
         if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
-        if (!isEnemy)
-        {
-            pm.JumpToPosition(grapplePoint, highestPointOnArc);
-
-            Invoke(nameof(StopGrapple), 1f);
-        }
-
+        pm.JumpToPosition(grapplePoint, highestPointOnArc);
     }
 
     public void StopGrapple()
@@ -116,28 +107,33 @@ public class Grappling : MonoBehaviour
 
         grapplingCdTimer = grapplingCd;
 
-        //lr.enabled = false;
+        playerCam.CameraShake(true);
     }
 
-    /// <param name="go"></param>
-    public void StopFie(GameObject go)
+    IEnumerator MoveAndShrinkEnemy(EnemyBase enemy, Vector3 targetPosition, float finalScale)
     {
+        float speed = 13f;
+        float scaleSpeed = 2f;
 
-        //UIMgr.Instance.isFire = false;
-        go.GetComponent<EnemyMgr>().ChangeScale();
+        Vector3 targetScale = Vector3.one * finalScale;
 
-        StartCoroutine(DestoryLine());
-        //grappling = false;
+        while (Vector3.Distance(enemy.transform.position, targetPosition) > 0.1f)
+        {
+            enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, targetPosition, speed * Time.deltaTime);
 
-        //grapplingCdTimer = grapplingCd;
-    }
-    IEnumerator DestoryLine()
-    {
-        yield return new WaitForSeconds(1f);
+            enemy.transform.localScale = Vector3.MoveTowards(enemy.transform.localScale, targetScale, scaleSpeed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        enemy.transform.SetParent(UIMgr.Instance.gunPos);
+        enemy.transform.localPosition = new Vector3(0, 0, 0.1f);
+        enemy.transform.localScale = targetScale;
 
         grappling = false;
         isEnemy = false;
     }
+
     public bool IsGrappling()
     {
         return grappling;

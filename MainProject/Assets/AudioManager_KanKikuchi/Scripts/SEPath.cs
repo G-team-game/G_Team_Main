@@ -5,9 +5,9 @@
 /// </summary>
 public static class SEPath{
 
-	public const string JINGLE10 = "SE/Jingle/jingle10";
-	public const string SYSTEM20 = "SE/system20";
-	public const string SYSTEM23 = "SE/system23";
+	public const string BUTTON   = "SE/Button";
+	public const string KILL     = "SE/Kill";
+	public const string MAP_DOWN = "SE/Map_Down";
 
 }
 
