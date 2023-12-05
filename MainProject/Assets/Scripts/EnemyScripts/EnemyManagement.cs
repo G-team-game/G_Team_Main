@@ -5,21 +5,25 @@ using UnityEngine;
 public class EnemyManagement : MonoBehaviour
 {
     public static EnemyManagement Instance;
-    [SerializeField] GameObject wanderingEnemyPrefab;
-    [SerializeField] GameObject chasingEnemyPrefab;
-    [SerializeField] GameObject floatingEnemyPrefab;
 
-    [SerializeField] int wanderingEnemyNumbers=5;
-    [SerializeField] int chasingEnemyNumbers=3;
+   
+
+
+    //[SerializeField] GameObject wanderingEnemyPrefab; scrptabeleobjectのwavedata.csに移動
+    //[SerializeField] GameObject chasingEnemyPrefab; ,,
+    //[SerializeField] GameObject floatingEnemyPrefab; ,,
+
+    //[SerializeField] int wanderingEnemyNumbers=5;
+    //[SerializeField] int chasingEnemyNumbers=3;
     //[SerializeField] int dashEnemyNumbers=1;
-    [SerializeField] int floatingEnemyNumbers = 1;
+    //[SerializeField] int floatingEnemyNumbers = 1;
 
     //[SerializeField] float dashSelectTime = 5.0f;
 
     //敵をスポーンさせるときの名前です。dashは徘徊してるのが変化するやつなので書いてないです。
-    [SerializeField] string wanderingEnemyName = "WanderingEnemy";
-    [SerializeField] string chasingEnemyName = "ChaseEnemy";
-    [SerializeField] string floatingEnemyName = "FloatEnemy";
+    //[SerializeField] string wanderingEnemyName = "WanderingEnemy"; scrptabeleobjectのwavedata.csに移動
+    //[SerializeField] string chasingEnemyName = "ChaseEnemy"; ,,
+    //[SerializeField] string floatingEnemyName = "FloatEnemy"; ,,
     [SerializeField] Transform[] spawnPoints;
     
     [SerializeField] public List<GameObject> wanderingList=new List<GameObject>();
@@ -42,9 +46,9 @@ public class EnemyManagement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartSpawnEney(wanderingEnemyNumbers,wanderingEnemyPrefab,wanderingEnemyName,wanderingList);
-        StartSpawnEney(chasingEnemyNumbers, chasingEnemyPrefab, chasingEnemyName, chaseList);
-        StartSpawnEney(floatingEnemyNumbers, floatingEnemyPrefab, floatingEnemyName, floatList);
+        //StartSpawnEney(wanderingEnemyNumbers, wavedata.wanderingEnemyPrefab,wanderingEnemyName,wanderingList);//wavedataからもってくるように変更
+        //StartSpawnEney(chasingEnemyNumbers, wavedata.chasingEnemyPrefab, chasingEnemyName, chaseList);//,,
+        //StartSpawnEney(floatingEnemyNumbers, wavedata.floatingEnemyPrefab, floatingEnemyName, floatList);//,,
     }
 
     // Update is called once per frame
@@ -53,7 +57,7 @@ public class EnemyManagement : MonoBehaviour
 
     }
 
-    private void StartSpawnEney(int enemyNumbers,GameObject enemyPrefab,string objectName,List<GameObject> enemyList)
+    public void StartSpawnEney(int enemyNumbers,GameObject enemyPrefab,string objectName,List<GameObject> enemyList)
     {
         prefabCount = 0;
         for (int i=0;i<enemyNumbers;i++)

@@ -12,12 +12,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d1b1a9d7708d4807a57a5dc077e9e6b, type: 3}
   m_Name: wave
   m_EditorClassIdentifier: 
-  waves: 0
+  waves: 2
+  wanderingEnemyPrefab: {fileID: 4137581206254706284, guid: bce23d27642d66f4499b595b7d1dc49a, type: 3}
+  chasingEnemyPrefab: {fileID: 4137581206254706284, guid: 8f4d068b7d51f2d489ae714584fb7df5, type: 3}
+  floatingEnemyPrefab: {fileID: 4137581206254706284, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+  wanderingEnemyName: WanderingEnemy
+  chasingEnemyName: ChaseEnemy
+  floatingEnemyName: FloatEnemy
   Item: {fileID: 0}
   wave:
   - enemylist:
-    - id: 0
-      enemytype: {fileID: 0}
+    - id: 1
+      enemytype: {fileID: 4137581206254706284, guid: bce23d27642d66f4499b595b7d1dc49a, type: 3}
+    - id: 2
+      enemytype: {fileID: 4137581206254706284, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+    - id: 3
+      enemytype: {fileID: 4137581206254706284, guid: 8f4d068b7d51f2d489ae714584fb7df5, type: 3}
     spawnlist:
     - SpawnPoints:
-      - {fileID: 0}
+      - {fileID: 3188955237564738227, guid: bbb5d53612ae10e4193626cec2a5b7cd, type: 3}
+      - {fileID: 2203652674506368593, guid: b520f0e5cf393f1448f307d29b43755f, type: 3}
+    - SpawnPoints:
+      - {fileID: 8749964281966684982, guid: 5e28936c83a5a204d8e780d75466cf94, type: 3}
+      - {fileID: 5754601241103082811, guid: 98a29bdf26be43d46b2d18f20e38aee5, type: 3}
+    - SpawnPoints:
+      - {fileID: 4576093468450826495, guid: 4bebcd3cb424e3a49a39b1436dd765f9, type: 3}
+  - enemylist:
+    - id: 1
+      enemytype: {fileID: 4137581206254706284, guid: bce23d27642d66f4499b595b7d1dc49a, type: 3}
+    - id: 2
+      enemytype: {fileID: 4137581206254706284, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+    - id: 3
+      enemytype: {fileID: 4137581206254706284, guid: 8f4d068b7d51f2d489ae714584fb7df5, type: 3}
+    spawnlist:
+    - SpawnPoints:
+      - {fileID: 3188955237564738227, guid: bbb5d53612ae10e4193626cec2a5b7cd, type: 3}
+      - {fileID: 2203652674506368593, guid: b520f0e5cf393f1448f307d29b43755f, type: 3}
+    - SpawnPoints:
+      - {fileID: 8749964281966684982, guid: 5e28936c83a5a204d8e780d75466cf94, type: 3}
+      - {fileID: 5754601241103082811, guid: 98a29bdf26be43d46b2d18f20e38aee5, type: 3}
+    - SpawnPoints:
+      - {fileID: 4576093468450826495, guid: 4bebcd3cb424e3a49a39b1436dd765f9, type: 3}

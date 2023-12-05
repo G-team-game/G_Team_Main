@@ -7,6 +7,12 @@ using System;
 public class WaveData : ScriptableObject
 {
 	public int waves;
+	[SerializeField] public GameObject wanderingEnemyPrefab;
+	[SerializeField] public GameObject chasingEnemyPrefab;
+	[SerializeField] public GameObject floatingEnemyPrefab;
+	[SerializeField] public string wanderingEnemyName = "WanderingEnemy";
+	[SerializeField] public string chasingEnemyName = "ChaseEnemy";
+	[SerializeField] public string floatingEnemyName = "FloatEnemy";
 	public GameObject Item;
 	public List<wave> wave = new List<wave>();
 
