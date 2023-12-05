@@ -124,4 +124,12 @@ public class EnemyBase : MonoBehaviour
         }
         chasePosition= randomposition;
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+            //Debug.Log("Player‚É“–‚½‚Á‚½!");
+        }
+    }
 }

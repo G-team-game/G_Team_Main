@@ -49,6 +49,11 @@ public class WaveManager : MonoBehaviour
 
             Debug.Log("hit");
         }
+        if (collision.gameObject.CompareTag("WanderEnemy"))
+        {
+            enemycount--;
+            enemycounts.text = enemycount.ToString();
+        }
         
 
     }
@@ -61,6 +66,7 @@ public class WaveManager : MonoBehaviour
             if(Wavecount-1 == wavedata.wave.Count)
             {
                 allclear.SetActive(true);
+                
 
             }
             enemycount = wavedata.wave[Wavecount-1].spawnlist[0].SpawnPoints.Length+wavedata.wave[Wavecount-1].spawnlist[1].SpawnPoints.Length+ wavedata.wave[Wavecount-1].spawnlist[2].SpawnPoints.Length;
