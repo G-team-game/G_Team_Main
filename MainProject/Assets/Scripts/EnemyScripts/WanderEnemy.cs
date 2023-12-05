@@ -13,7 +13,7 @@ public class WanderEnemy : EnemyBase
     [SerializeField] protected float wanderingDistance = 10f;
 
     [SerializeField] float rotationTime = 2.0f;
-    [SerializeField] float dashTime = 5.0f;
+    [SerializeField] float dashTime = 3.0f;
     protected override void Start()
     {
         base.Start();
@@ -21,14 +21,6 @@ public class WanderEnemy : EnemyBase
     }
     protected override void Update()
     {
-        //Vector3 rayDirection = wanderPosition - transform.position;
-        //Ray ray = new Ray(transform.position, rayDirection);
-        //RaycastHit hit;
-        //if(Physics.Raycast(ray,out hit,Vector3.Distance(transform.position,wanderPosition)))
-        //{
-        //    Debug.DrawRay(transform.position, rayDirection, Color.red);
-        //    Debug.Log("障害物が検出されました。");
-        //}
         if (isDash && !isCoroutine)
         {
             isCoroutine = true;
@@ -111,7 +103,6 @@ public class WanderEnemy : EnemyBase
             if (!Physics.Raycast(ray, out hit, Vector3.Distance(transform.position, randomPosition)))
             {
                 Debug.DrawRay(transform.position, rayDirection, Color.red);
-                Debug.Log("障害物が検出されました。");
                 break;
             }
         }
@@ -151,6 +142,7 @@ public class WanderEnemy : EnemyBase
 
     private bool CheckCollision()
     {
+
         //突進してるときに何かにぶつかったら～っていう判定用(まだ実装してない)
         return false;
     }

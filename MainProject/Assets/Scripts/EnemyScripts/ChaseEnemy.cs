@@ -12,7 +12,6 @@ public class ChaseEnemy : EnemyBase
     //Playerとどの距離以上になったら座標を再設定するか
     [SerializeField] float maxPlayerDistance = 15f;
     private Vector3 chasePosition;
-    private bool playerChase=false;
     protected override void Start()
     {
         base.Start();
@@ -20,18 +19,18 @@ public class ChaseEnemy : EnemyBase
     }
     protected override void Update()
     {
-        if(Physics.Linecast(transform.position,chasePosition, out RaycastHit hit, collisionLayer))
+        if(Physics.Raycast(transform.position,chasePosition, out RaycastHit hit, collisionLayer))
         {
+            Debug.Log("障害物を検知");
             GetRandomPositionNearPlayer();
         }
-        if (Vector3.Distance(transform.position, chasePosition) < 1f||Vector3.Distance(transform.position,chasePosition)>maxPlayerDistance)
+        if (Vector3.Distance(transform.position, chasePosition) < 1f||Vector3.Distance(transform.position,playerTransform.position)>maxPlayerDistance)
         {
             GetRandomPositionNearPlayer();
         }
 
         if (Vector3.Distance(transform.position, playerTransform.position) < chasingPlayerDistance)
         {
-            playerChase=true;
             direction = (playerTransform.position - transform.position).normalized;
             GetRandomPositionNearPlayer();
         }
@@ -39,6 +38,7 @@ public class ChaseEnemy : EnemyBase
         {
             direction = (chasePosition - transform.position).normalized;
         }
+        Debug.DrawRay(transform.position,direction);
         base.Update();
     }
 
@@ -53,7 +53,7 @@ public class ChaseEnemy : EnemyBase
         //    randomposition.y = Mathf.Abs(randomposition.y);
         //}
         Collider[] colliders = Physics.OverlapSphere(randomPosition, chasingMaxDistance, collisionLayer);
-        if (colliders.Length > 0|| Physics.Linecast(playerPosition, randomPosition, out RaycastHit hit, collisionLayer))
+        if (colliders.Length > 0|| Physics.Linecast(transform.position, randomPosition, out RaycastHit hit, collisionLayer))
         {
             Debug.Log("障害物を検知");
             GetRandomPositionNearPlayer();//もう一回ランダム生成

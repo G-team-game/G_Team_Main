@@ -15,7 +15,6 @@ public class EnemyBase : MonoBehaviour
     protected LayerMask collisionLayer;
     protected EnemyManagement enemyManagement;
     protected EnemyCollision collision;
-
     protected bool isDash = false;
 
     protected virtual void Start()
@@ -29,6 +28,7 @@ public class EnemyBase : MonoBehaviour
         rangeA = GameObject.Find("ChaseRangeA").transform;
         rangeB = GameObject.Find("ChaseRangeB").transform;
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
     }
 
     protected virtual void Update()
@@ -40,7 +40,4 @@ public class EnemyBase : MonoBehaviour
         else
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
-
-    
-    
 }

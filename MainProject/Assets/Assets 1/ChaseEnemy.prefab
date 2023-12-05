@@ -213,8 +213,8 @@ MonoBehaviour:
   dashSpeed: 10
   rotationSpeed: 5
   chasingMaxDistance: 10
-  chasingPlayerDistance: 0.1
-  maxPlayerDistance: 15
+  chasingPlayerDistance: 5
+  maxPlayerDistance: 30
 --- !u!54 &-5158344157562771827
 Rigidbody:
   m_ObjectHideFlags: 0
