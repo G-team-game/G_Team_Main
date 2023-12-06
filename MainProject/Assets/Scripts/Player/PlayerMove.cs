@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
@@ -97,6 +94,7 @@ public class PlayerMove : MonoBehaviour
 
         if (inputSystem.Player.GrapplingShot.WasReleasedThisFrame())
         {
+            rb.drag = 0;
             grappling.StopGrapple();
             activeGrapple = false;
         }
