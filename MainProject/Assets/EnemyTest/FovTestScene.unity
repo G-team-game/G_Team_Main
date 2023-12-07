@@ -12612,7 +12612,7 @@ MonoBehaviour:
   chasingEnemyPrefab: {fileID: 4137581206254706284, guid: 8f4d068b7d51f2d489ae714584fb7df5, type: 3}
   floatingEnemyPrefab: {fileID: 4137581206254706284, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
   wanderingEnemyNumbers: 0
-  chasingEnemyNumbers: 1
+  chasingEnemyNumbers: 0
   floatingEnemyNumbers: 0
   wanderingEnemyName: WanderingEnemy
   chasingEnemyName: ChaseEnemy
@@ -14333,6 +14333,14 @@ PrefabInstance:
     - target: {fileID: 4137581206254706288, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121260530908644130, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+      propertyPath: upwardForce
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121260530908644130, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}
+      propertyPath: forwardForce
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9c0d4b9e24575e438f766703c36763c, type: 3}

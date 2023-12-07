@@ -47,11 +47,6 @@ public class ChaseEnemy : EnemyBase
         Vector3 playerPosition = playerTransform.position;
         Vector3 randomOffset = Random.insideUnitSphere * chasingMaxDistance;
         Vector3 randomPosition = playerPosition + randomOffset;
-        //if (randomposition.y < 0)
-        //{
-        //    //’n–Ê‚É–„‚Ü‚ñ‚È‚¢‚æ‚¤‚ÉÀ•W‚ð³‚É‚µ‚Ä‚½‚¯‚Ç­‚µˆ—•Ï‚¦‚½‚Ù‚¤‚ª‚¢‚¢‚©‚à
-        //    randomposition.y = Mathf.Abs(randomposition.y);
-        //}
         Collider[] colliders = Physics.OverlapSphere(randomPosition, chasingMaxDistance, collisionLayer);
         if (colliders.Length > 0|| Physics.Linecast(transform.position, randomPosition, out RaycastHit hit, collisionLayer))
         {

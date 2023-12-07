@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class BlowOff : MonoBehaviour
 {
-    [SerializeField] float impulse = 300;
     bool isCollision = false;
+    private Collider enemyCollider;
+    private Rigidbody enemyRigidbody;
+    FloatEnemy floatEnemy;
+    WanderEnemy wanderEnemy;
+    ChaseEnemy chaseEnemy;
 
-    Rigidbody rigidBody;
-    Rigidbody playerRigidBody;
-    GameObject player;
+    [SerializeField] float upwardForce = 10f;
+    [SerializeField] float forwardForce=5f;
+    [SerializeField] float hiddenObjectTime = 2.0f;
+
     // Start is called before the first frame update
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody>();
-
-        //プレイヤーをタグで検索し、Rigidbodyを取得
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerRigidBody = player.GetComponent<Rigidbody>();
+        floatEnemy = GetComponent<FloatEnemy>();
+        wanderEnemy = GetComponent<WanderEnemy>();
+        chaseEnemy = GetComponent<ChaseEnemy>();
+        enemyCollider = GetComponent<Collider>();
+        enemyRigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -27,21 +32,42 @@ public class BlowOff : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player" && isCollision == false)
+        if (collision.gameObject.CompareTag("Player")) // プレイヤーに当たった場合
         {
-            //吹っ飛ばす
-            FloatEnemy floatEnemy=GetComponent<FloatEnemy>();
-            if (floatEnemy != null)
-            {
-                floatEnemy.enabled = false;
-            }
-            Vector3 playerVelocity = playerRigidBody.velocity;
-            //rigidBody.AddForce(playerVelocity * impulse, ForceMode.Impulse);
-            //rigidBody.AddForce(Vector3.up * impulse, ForceMode.Impulse);
-            Vector3 forceDirection = playerVelocity.normalized + Vector3.up * 0.5f; // ここで0.5fは調整可能な係数
-            rigidBody.AddForce(forceDirection * impulse, ForceMode.Impulse);
-            GetComponent<Rigidbody>().useGravity = true;
-            isCollision = true;
+            HandleCollision();
         }
+    }
+
+    void HandleCollision()
+    {
+        //スクリプト止める
+        if (floatEnemy != null)
+            floatEnemy.enabled = false;
+        if (wanderEnemy != null)
+            wanderEnemy.enabled = false;
+        if(chaseEnemy != null)
+            chaseEnemy.enabled = false;
+
+        // 当たり判定を無効化
+        enemyCollider.enabled = false;
+
+        // RigidbodyのuseGravityを有効にする
+        enemyRigidbody.useGravity = true;
+
+        // 上方向かつ前方向に力を加えて吹っ飛ばす
+        Vector3 upwardDirection = Vector3.up * upwardForce;
+        Vector3 forwardDirection = transform.forward * forwardForce;
+        enemyRigidbody.AddForce(upwardDirection + forwardDirection, ForceMode.Impulse);
+
+        // オブジェクトを非表示にするためのコルーチンを開始
+        StartCoroutine(HideObjectAfterDelay(hiddenObjectTime));
+    }
+
+    IEnumerator HideObjectAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // オブジェクトを非表示にする
+        gameObject.SetActive(false);
     }
 }
