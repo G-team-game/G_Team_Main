@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4137581206254706288}
   - component: {fileID: 4137581206254706285}
-  - component: {fileID: 5216994651234568980}
   - component: {fileID: 4086860960308859530}
   - component: {fileID: 2580780223384264615}
   m_Layer: 6
@@ -49,26 +48,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.2
   m_Center: {x: 0, y: 0, z: -0.25}
---- !u!114 &5216994651234568980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4137581206254706284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ca68f612e54b9144a0e309569f65b63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0
-  rotationSpeed: 5
-  dashSpeed: 10
-  wanderingDistance: 30
-  chasingMaxDistance: 15
-  chasingPlayerDistance: 3
-  enemyType: 0
-  enemyState: 0
 --- !u!114 &4086860960308859530
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -30,7 +30,7 @@ public class Grappling : MonoBehaviour
 
     public bool isEnemy;
 
-    private EnemyBase targetEnemy;
+    private EnemyMgr targetEnemy;
 
     private void Start()
     {
@@ -70,8 +70,7 @@ public class Grappling : MonoBehaviour
             {
                 isEnemy = true;
 
-                targetEnemy = hit.collider.GetComponent<EnemyBase>();
-                targetEnemy._enemyState = EnemyState.restraint;
+                targetEnemy = hit.collider.GetComponent<EnemyMgr>();
             }
 
             grapplePoint = hit.point;

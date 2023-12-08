@@ -17,9 +17,8 @@ public enum EnemyType
 public class EnemyBase : MonoBehaviour
 {
     [SerializeField] protected float speed = 3f;
-    [SerializeField] protected float rotationSpeed = 5f;
     [SerializeField] protected float dashSpeed = 10f;
-    [SerializeField] protected float wanderingDistance = 30f;
+    // [SerializeField] protected float wanderingDistance = 30f;
     [SerializeField] protected float chasingMaxDistance = 15f;
     [SerializeField] protected float chasingPlayerDistance = 3f;
     [SerializeField] private EnemyType enemyType;
@@ -27,16 +26,16 @@ public class EnemyBase : MonoBehaviour
 
     [SerializeField] private EnemyState enemyState;
     public EnemyState _enemyState { get { return enemyState; } set { enemyState = value; } }
+    [SerializeField] protected float rotationSpeed = 5f;
+
     protected Transform playerTransform;
-    protected Vector3 wanderPosition;
-    protected Vector3 chasePosition;
-    protected Vector3 dashPosition;
     protected Vector3 direction;
+    protected Vector3 wanderPosition, chasePosition;
     protected Transform rangeA;
     protected Transform rangeB;
-
     protected LayerMask collisionLayer;
     protected EnemyManagement enemyManagement;
+    protected EnemyCollision collision;
     protected bool isDash = false;
 
     protected virtual void Start()
@@ -50,6 +49,7 @@ public class EnemyBase : MonoBehaviour
         rangeA = GameObject.Find("ChaseRangeA").transform;
         rangeB = GameObject.Find("ChaseRangeB").transform;
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
     }
 
     protected virtual void Update()
@@ -72,7 +72,7 @@ public class EnemyBase : MonoBehaviour
 
     private Vector3 GenerateRandomPosition()
     {
-        Vector3 randomDirection = Random.insideUnitSphere * wanderingDistance;
+        Vector3 randomDirection = Random.insideUnitSphere;
         randomDirection += transform.position;
         randomDirection.y = Mathf.Abs(randomDirection.y);
 
@@ -114,6 +114,6 @@ public class EnemyBase : MonoBehaviour
         {
             GetRandomPositionNearPlayer();
         }
-        chasePosition = randomposition;
+        // chasePosition = randomposition;
     }
 }

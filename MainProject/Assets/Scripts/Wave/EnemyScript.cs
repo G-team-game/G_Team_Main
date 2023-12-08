@@ -31,7 +31,7 @@ public class EnemyScript : MonoBehaviour
         rangeA = GameObject.Find("ChaseRangeA").transform;
         rangeB = GameObject.Find("ChaseRangeB").transform;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        enemySpawn=EnemySpawn.Instance;
+        enemySpawn = EnemySpawn.Instance;
         if (enemySpawn == null)
         {
             Debug.LogError("EnemySpawn not found.");
@@ -40,7 +40,7 @@ public class EnemyScript : MonoBehaviour
 
         if (!isChasing)
             SetWayPoint();
-        else if(isChasing)
+        else if (isChasing)
             ChasingRandomPosition = GetRandomPositionNearPlayer();
     }
 
@@ -49,13 +49,13 @@ public class EnemyScript : MonoBehaviour
         Vector3 direction;
         if (isChasing)
         {
-            if(Vector3.Distance(transform.position,ChasingRandomPosition)<1f)
+            if (Vector3.Distance(transform.position, ChasingRandomPosition) < 1f)
             {
                 ChasingRandomPosition = GetRandomPositionNearPlayer();
             }
-            
+
             //Debug.Log(ChasingRandomPosition);
-            if(Vector3.Distance(transform.position,player.position)<playerChaseDistance)
+            if (Vector3.Distance(transform.position, player.position) < playerChaseDistance)
             {
                 direction = (player.position - transform.position).normalized;
             }
@@ -66,14 +66,14 @@ public class EnemyScript : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
-            
+
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
-        else if(!isChasing)// 徘徊する処理
+        else if (!isChasing)// 徘徊する処理
         {
-            if(CheckDashList(this.gameObject))
+            if (CheckDashList(this.gameObject))
             {
-                Debug.Log("ダッシュ中"+this.gameObject.name);
+                Debug.Log("ダッシュ中" + this.gameObject.name);
             }
             else if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
             {
@@ -83,7 +83,7 @@ public class EnemyScript : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             transform.Translate(Vector3.forward * speed * Time.deltaTime);
-            
+
         }
     }
 
@@ -97,7 +97,7 @@ public class EnemyScript : MonoBehaviour
             randomposition.y = Mathf.Abs(randomposition.y);//地面より下に行っちゃわないようにy座標を正に
         }
         Collider[] colliders = Physics.OverlapSphere(randomposition, ChasingMaxDistance, collisionLayer);
-        if(colliders.Length>0)
+        if (colliders.Length > 0)
         {
             return GetRandomPositionNearPlayer();//もう一回ランダム生成
         }
@@ -106,7 +106,7 @@ public class EnemyScript : MonoBehaviour
     private void SetWayPoint()
     {
         Vector3 randomPosition = GenerateRandomPosition();
-        Debug.Log("Random Position: " + randomPosition+this.gameObject.name);//ランダム座標確認用
+        Debug.Log("Random Position: " + randomPosition + this.gameObject.name);//ランダム座標確認用
         targetPosition = randomPosition;
 
     }

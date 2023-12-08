@@ -10,7 +10,6 @@ public class RushScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             SEManager.Instance.Play(SEPath.KILL);
-            Destroy(collision.gameObject);
         }
     }
 }
