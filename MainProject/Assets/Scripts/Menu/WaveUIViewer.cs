@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
-public class WaveUIView : MonoBehaviour
+public class WaveUIViewer : MonoBehaviour
 {
     [SerializeField] private CanvasGroup waveCanvasGroup;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Transform waveUIParent;
     [SerializeField] private WaveEnemyIconView waveEnemyIcon;
-    [SerializeField] private StageDatabase stageDatabase;
 
     private List<WaveEnemyIconView> waveEnemyIcons = new List<WaveEnemyIconView>();
-    private int stageCount;
 
-    public void InitWaveUI(int stageCount)
+    public void InitWaveUI(int enemycount)
     {
         waveEnemyIcons.Clear();
         if (waveUIParent.transform.childCount > 0)
@@ -25,12 +23,10 @@ public class WaveUIView : MonoBehaviour
             }
         }
 
-        this.stageCount = stageCount;
-        var waveData = stageDatabase.stageDatas[stageCount].waveData;
-        text.text = "WAVE 1/" + waveData.wave.Count.ToString();
+        text.text = "Enemies 0/" + enemycount.ToString();
         DOTween.To(() => waveCanvasGroup.alpha, (v) => waveCanvasGroup.alpha = v, 1, 0.3f);
 
-        for (int i = 0; i < waveData.wave[0].enemylist.Count; i++)
+        for (int i = 0; i < enemycount; i++)
         {
             var w = Instantiate(waveEnemyIcon);
             w.transform.parent = waveUIParent;
@@ -39,11 +35,9 @@ public class WaveUIView : MonoBehaviour
         }
     }
 
-    public void UpdateWaveUI(int waveIndex)
+    public void UpdateWaveUI(int enemycount, int maxEnemyCount)
     {
-        var waveCount = waveIndex + 1;
-        var waveData = stageDatabase.stageDatas[stageCount].waveData;
-        text.text = "WAVE " + waveCount.ToString() + "/" + waveData.wave.Count.ToString();
-        waveEnemyIcons[waveIndex].defeatEnemy();
+        text.text = "ENEMIES " + enemycount.ToString() + "/" + maxEnemyCount.ToString();
+        waveEnemyIcons[maxEnemyCount - enemycount].defeatEnemy();
     }
 }

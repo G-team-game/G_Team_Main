@@ -21,9 +21,6 @@ public class PlayerMove : MonoBehaviour
     public LayerMask whatIsGround;
     public float groundDrag;
     bool grounded;
-
-    [Header("Ready to Start")]
-    public Image fadeImage;
     public float fadeDuration = 1f;
 
     [SerializeField] private float grapSpeed;
@@ -55,13 +52,9 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
-        fadeImage.enabled = true;
-
         readyToJump = true;
 
         playerCamera = Camera.main.transform;
-
-        StartCoroutine(FadeIn());
     }
 
     private void OnEnable()
@@ -86,19 +79,6 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-        //ここで呼ぶ
-        if (inputSystem.Player.GrapplingShot.WasPerformedThisFrame())
-        {
-            grappling.PlayerShot();
-        }
-
-        if (inputSystem.Player.GrapplingShot.WasReleasedThisFrame())
-        {
-            rb.drag = 0;
-            grappling.StopGrapple();
-            activeGrapple = false;
-        }
-
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         inputDirection = inputSystem.Player.Move.ReadValue<Vector2>();
@@ -111,26 +91,27 @@ public class PlayerMove : MonoBehaviour
             rb.drag = 0;
     }
 
-    private void FixedUpdate()
+    public void Release()
     {
-        Move();
+        rb.drag = 0;
+        activeGrapple = false;
     }
 
-    void Move()
+    public void Move(Vector2 dir)
     {
-        Vector3 moveDirection = playerCamera.forward * inputDirection.y + playerCamera.right * inputDirection.x;
 
+        Vector3 moveDirection = playerCamera.forward * dir.y + playerCamera.right * dir.x;
         moveDirection.y = 0;
 
         if (activeGrapple) return;
 
         // on ground
         else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * moveSpeed, ForceMode.Force);
 
         // in air
         else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier, ForceMode.Force);
     }
 
     void PlayerJump(InputAction.CallbackContext obj)
@@ -227,18 +208,5 @@ public class PlayerMove : MonoBehaviour
             + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
 
         return velocityXZ + velocityY;
-    }
-
-    IEnumerator FadeIn()
-    {
-        for (float t = 0f; t < fadeDuration; t += Time.deltaTime)
-        {
-            fadeImage.color = Color.Lerp(Color.black, new Color(0, 0, 0, 0), t / fadeDuration);
-            yield return null;
-        }
-
-        fadeImage.color = new Color(0, 0, 0, 0);
-
-        fadeImage.enabled = false;
     }
 }

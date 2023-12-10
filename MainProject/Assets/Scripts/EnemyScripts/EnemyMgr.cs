@@ -3,6 +3,7 @@ public class EnemyMgr : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float moveValue;
+    [SerializeField] private Collider collider;
     public float atktimer = 0;
     public int atkDamage = 5;
     public bool isFire = false;
@@ -46,6 +47,7 @@ public class EnemyMgr : MonoBehaviour
             rigidBody.AddForce(forceDirection * impulse, ForceMode.Impulse);
             GetComponent<Rigidbody>().useGravity = true;
             isCollision = true;
+            collider.enabled = false;
         }
     }
 }

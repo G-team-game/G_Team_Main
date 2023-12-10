@@ -25,9 +25,6 @@ public class PlayerCam : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         startPos = transform.localPosition;
     }
 
@@ -49,7 +46,6 @@ public class PlayerCam : MonoBehaviour
     Vector3 startPos;
     public void CameraShake(bool isStop)
     {
-        Debug.Log("cameraShake" + isStop);
         if (isStop == true)
         {
             if (tweener != null) tweener.Kill();
@@ -58,8 +54,16 @@ public class PlayerCam : MonoBehaviour
 
             transform.localPosition = startPos;
             effect.gameObject.SetActive(false);
-            chromaticAberration.intensity.value = 0;
-            lensDistortion.intensity.value = 0;
+
+            if (volume.profile.TryGet<ChromaticAberration>(out chromaticAberration))
+            {
+                chromaticAberration.intensity.value = 0;
+            }
+
+            if (volume.profile.TryGet<LensDistortion>(out lensDistortion))
+            {
+                lensDistortion.intensity.value = 0;
+            }
             return;
         }
 
@@ -78,10 +82,8 @@ public class PlayerCam : MonoBehaviour
         effect.gameObject.SetActive(true);
     }
 
-    private void Update()
+    public void Look(Vector2 camDirection)
     {
-        camDirection = inputSystem.Player.Look.ReadValue<Vector2>();
-
         InputDevice inputDevice = InputSystem.devices.FirstOrDefault(d => d.enabled);
 
         if (inputDevice is Pointer)

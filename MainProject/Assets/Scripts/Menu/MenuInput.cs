@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-
 public class MenuInput : MonoBehaviour
 {
     [Header("Menu Object")]
@@ -89,9 +88,6 @@ public class MenuInput : MonoBehaviour
         _playerHP.enabled = false;
         hpBar.SetActive(false);
 
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-
         OpenMainMenu();
     }
 
@@ -104,9 +100,6 @@ public class MenuInput : MonoBehaviour
         _graplling.enabled = true;
         _playerHP.enabled = true;
         hpBar.SetActive(true);
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
 
         CloseAllMenu();
     }
@@ -121,8 +114,6 @@ public class MenuInput : MonoBehaviour
         _playerHP.enabled = false;
         hpBar.SetActive(false);
 
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
         OpenGameOverMenuHandle();
     }
 
@@ -136,8 +127,6 @@ public class MenuInput : MonoBehaviour
         _playerHP.enabled = false;
         hpBar.SetActive(false);
 
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
         OpenSuccessMenuHandle();
     }
 

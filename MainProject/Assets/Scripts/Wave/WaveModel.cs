@@ -3,7 +3,7 @@ using UniRx;
 using System.Collections.Generic;
 public sealed class WaveModel : MonoBehaviour
 {
-    [SerializeField] private StageDatabase stageDatabase;
+    // [SerializeField] private StageDatabase stageDatabase;
     public IReadOnlyReactiveProperty<int> WaveIndex => _waveIndex;
     private readonly IntReactiveProperty _waveIndex = new IntReactiveProperty(-1);
 

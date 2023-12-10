@@ -59,6 +59,7 @@ public class WanderEnemy : EnemyBase
         gameObject.GetComponent<Renderer>().material.color = Color.white;
         dashPosition = playerTransform.position;
     }
+
     IEnumerator dashCoroutine()
     {
         // isWaiting = true;

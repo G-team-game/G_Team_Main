@@ -49,7 +49,6 @@ public class Grappling : MonoBehaviour
             grapplingCdTimer -= Time.deltaTime;
     }
 
-
     private void StartGrapple()
     {
         if (grapplingCdTimer > 0)

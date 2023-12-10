@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerHP : MonoBehaviour
 {
-    public PlayerHealth playerHealth;
+    // public PlayerHealth playerHealth;
     public int hp = 100;
     private int maxHp = 0;
     private int lastHP;
@@ -42,11 +42,11 @@ public class PlayerHP : MonoBehaviour
                 {
                     hp = maxHp;
                     isAdd = false;
-                    playerHealth.UpdateAddHP(hp, maxHp, hp);
+                    //playerHealth.UpdateAddHP(hp, maxHp, hp);
                     return;
                 }
                 addhpTimer = 0;
-                playerHealth.UpdateAddHP(hp + addHPValue, maxHp, hp);
+                //playerHealth.UpdateAddHP(hp + addHPValue, maxHp, hp);
                 hp += addHPValue;
             }
         }
@@ -59,12 +59,10 @@ public class PlayerHP : MonoBehaviour
         {
             //Game Over
             panel.SetActive(true);
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
         }
         else
         {
-            playerHealth.UpdateReduceHP(hp - atk, maxHp, hp);
+            //playerHealth.UpdateReduceHP(hp - atk, maxHp, hp);
             hp = hp - atk;
         }
     }

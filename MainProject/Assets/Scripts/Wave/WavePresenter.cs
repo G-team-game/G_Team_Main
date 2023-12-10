@@ -5,9 +5,9 @@ using UnityEngine;
 using UniRx;
 public class WavePresenter : MonoBehaviour
 {
-    [SerializeField] private StageDatabase stageDatabase;
+    // [SerializeField] private StageDatabase stageDatabase;
     [SerializeField] private WaveModel waveModel;
-    [SerializeField] private WaveUIView waveUIView;
+    [SerializeField] private WaveUIViewer waveUIView;
     [SerializeField] private EnemyManagement enemyManagement;
     // Start is called before the first frame update
     void Start()
@@ -17,9 +17,9 @@ public class WavePresenter : MonoBehaviour
             .Where(stage => stage >= 0)
             .Subscribe(stage =>
             {
-                var s = Instantiate(stageDatabase.stageDatas[stage].stageObject);
-                s.transform.position = Vector3.zero;
-                s.transform.rotation = Quaternion.identity;
+                // var s = Instantiate(stageDatabase.stageDatas[stage].stageObject);
+                // s.transform.position = Vector3.zero;
+                // s.transform.rotation = Quaternion.identity;
 
                 waveUIView.InitWaveUI(stage);
 
@@ -38,7 +38,7 @@ public class WavePresenter : MonoBehaviour
         .Where(wave => wave >= 0)
             .Subscribe(wave =>
             {
-                waveUIView.UpdateWaveUI(wave);
+                waveUIView.UpdateWaveUI(wave, 1);
                 enemyManagement.SpawnEney(waveModel.StageIndex.Value, wave);
             }).AddTo(this);
     }
