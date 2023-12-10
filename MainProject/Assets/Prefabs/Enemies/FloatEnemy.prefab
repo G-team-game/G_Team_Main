@@ -62,9 +62,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   moveValue: 5
+  collider: {fileID: 4137581206254706285}
   atktimer: 1
   atkDamage: 5
   isFire: 0
+  impulse: 300
 --- !u!54 &2580780223384264615
 Rigidbody:
   m_ObjectHideFlags: 0
