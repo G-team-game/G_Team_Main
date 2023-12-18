@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61cea16b1319a4295b72514a87b7cc23, type: 3}
+  m_Script: {fileID: 11500000, guid: b8f80afa94a0945e59c61902684aff44, type: 3}
   m_Name: StageDatabase
   m_EditorClassIdentifier: 
   stageDatas:
-  - id: 0
-    stageName: 
-    stageData: 
-    stageObject: {fileID: 0}
-    waveData: {fileID: 0}
+  - {fileID: 11400000, guid: ebeee0dfbe3604bd3b0aa54972359eab, type: 2}
