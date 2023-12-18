@@ -12,7 +12,7 @@ namespace Stage
 
         public static void InitSettings()
         {
-            stageDatabase = Resources.Load<StageDatabase>("StageSettings");
+            stageDatabase = Resources.Load<StageDatabase>("StageDatabase");
         }
 
         public static void Load(int stageId)

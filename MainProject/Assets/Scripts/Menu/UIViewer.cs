@@ -8,9 +8,9 @@ public class WaveUIViewer : MonoBehaviour
     [SerializeField] private CanvasGroup waveCanvasGroup;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Transform waveUIParent;
-    [SerializeField] private WaveEnemyIconView waveEnemyIcon;
+    [SerializeField] private EnemyIconView waveEnemyIcon;
 
-    private List<WaveEnemyIconView> waveEnemyIcons = new List<WaveEnemyIconView>();
+    private List<EnemyIconView> waveEnemyIcons = new List<EnemyIconView>();
 
     public void InitWaveUI(int enemycount)
     {

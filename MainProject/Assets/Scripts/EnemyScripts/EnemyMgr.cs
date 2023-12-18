@@ -1,9 +1,11 @@
 using UnityEngine;
+using DG.Tweening;
 public class EnemyMgr : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float moveValue;
     [SerializeField] private Collider collider;
+    [SerializeField] private GameObject blackBody, normalBody;
     public float atktimer = 0;
     public int atkDamage = 5;
     public bool isFire = false;
@@ -33,21 +35,26 @@ public class EnemyMgr : MonoBehaviour
         transform.position = new Vector3(transform.position.x, startPos.y + x, transform.position.z);
     }
 
-    void OnCollisionEnter(Collision collision)
+    public void Blow()
     {
-        if (collision.gameObject.tag == "Player" && isCollision == false)
+        FloatEnemy floatEnemy = GetComponent<FloatEnemy>();
+        if (floatEnemy != null)
         {
-            FloatEnemy floatEnemy = GetComponent<FloatEnemy>();
-            if (floatEnemy != null)
-            {
-                floatEnemy.enabled = false;
-            }
-            Vector3 playerVelocity = playerRigidBody.velocity;
-            Vector3 forceDirection = playerVelocity.normalized + Vector3.up * 0.5f;
-            rigidBody.AddForce(forceDirection * impulse, ForceMode.Impulse);
-            GetComponent<Rigidbody>().useGravity = true;
-            isCollision = true;
-            collider.enabled = false;
+            floatEnemy.enabled = false;
         }
+
+        blackBody.transform.DOShakePosition(0.5f, 1, 50);
+
+        blackBody.SetActive(true);
+        normalBody.SetActive(false);
+
+        Vector3 playerVelocity = playerRigidBody.velocity;
+        Vector3 forceDirection = playerVelocity.normalized + Vector3.up * 0.5f;
+        rigidBody.AddForce(forceDirection * impulse, ForceMode.Impulse);
+        GetComponent<Rigidbody>().useGravity = true;
+        isCollision = true;
+        collider.enabled = false;
+
+        Destroy(gameObject, 5);
     }
 }

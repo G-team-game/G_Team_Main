@@ -19,11 +19,12 @@ public class PlayerMove : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
+    [SerializeField] private float skyDrag;
     public float groundDrag;
     bool grounded;
     public float fadeDuration = 1f;
 
-    [SerializeField] private float grapSpeed;
+    [SerializeField] private float grapSpeed, maxGrapSpeed;
     [SerializeField] private float jumpSpeed;
 
 
@@ -53,55 +54,42 @@ public class PlayerMove : MonoBehaviour
     private void Start()
     {
         readyToJump = true;
-
         playerCamera = Camera.main.transform;
-    }
-
-    private void OnEnable()
-    {
-        inputSystem.Player.Fire.started += ctx => shotButtonState = true;
-        inputSystem.Player.Fire.canceled += ctx => shotButtonState = false;
-
-        inputSystem.Player.Jump.started += PlayerJump;
-
-        inputSystem.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputSystem.Player.Fire.started -= ctx => shotButtonState = true;
-        inputSystem.Player.Fire.canceled -= ctx => shotButtonState = false;
-
-        inputSystem.Player.Jump.started -= PlayerJump;
-
-        inputSystem.Disable();
     }
 
     private void Update()
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        inputDirection = inputSystem.Player.Move.ReadValue<Vector2>();
-
-        SpeedControl();
-
-        if (grounded && !activeGrapple)
+        if (grounded)
+        {
             rb.drag = groundDrag;
+        }
         else
-            rb.drag = 0;
+        {
+            rb.drag = activeGrapple ? 0 : skyDrag;
+        }
     }
 
     public void Release()
     {
-        rb.drag = 0;
+        rb.useGravity = true;
+        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         activeGrapple = false;
+    }
+
+    public void Shot()
+    {
+        rb.velocity = Vector3.zero;
+        activeGrapple = true;
     }
 
     public void Move(Vector2 dir)
     {
-
         Vector3 moveDirection = playerCamera.forward * dir.y + playerCamera.right * dir.x;
         moveDirection.y = 0;
+
+        SpeedControl();
 
         if (activeGrapple) return;
 
@@ -112,41 +100,6 @@ public class PlayerMove : MonoBehaviour
         // in air
         else if (!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * airMultiplier, ForceMode.Force);
-    }
-
-    void PlayerJump(InputAction.CallbackContext obj)
-    {
-        if (readyToJump)
-        {
-            readyToJump = false;
-
-            Jump();
-
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
-    }
-
-    private void Jump()
-    {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-    }
-
-    private void ResetJump()
-    {
-        readyToJump = true;
-    }
-
-    private void PlayerGrappling(InputAction.CallbackContext obj)
-    {
-        grappling.PlayerShot();
-    }
-
-    private void PlayerGrapplingRelease(InputAction.CallbackContext obj)
-    {
-        grappling.StopGrapple();
-        activeGrapple = false;
     }
 
     private void SpeedControl()
@@ -168,19 +121,17 @@ public class PlayerMove : MonoBehaviour
     }
 
     private bool enableMovementOnNextTouch;
-    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    public void JumpToPosition(Vector3 targetPosition)
     {
         activeGrapple = true;
 
-        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-        Invoke(nameof(SetVelocity), 0.1f);
-    }
+        rb.useGravity = false;
 
-    private Vector3 velocityToSet;
-    private void SetVelocity()
-    {
+        var velocityToSet = CalculateJumpVelocity(transform.position, targetPosition);
+        var velocityToSetNormal = velocityToSet.normalized;
         enableMovementOnNextTouch = true;
-        rb.velocity = new Vector3(velocityToSet.normalized.x * grapSpeed, velocityToSet.y * jumpSpeed, velocityToSet.normalized.z * grapSpeed);
+        if (rb.velocity.magnitude > maxGrapSpeed) return;
+        rb.AddForce(new Vector3(velocityToSetNormal.x * grapSpeed + velocityToSet.x, velocityToSetNormal.y * grapSpeed + velocityToSet.y, velocityToSetNormal.z * grapSpeed + velocityToSet.z));
     }
 
     public void ResetRestrictions()
@@ -197,16 +148,11 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint)
     {
         float gravity = Physics.gravity.y;
-        float displacementY = endPoint.y - startPoint.y;
-        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+        Vector3 def = endPoint - startPoint;
 
-        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
-        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
-            + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
-
-        return velocityXZ + velocityY;
+        return new Vector3(def.x, def.y + Mathf.Sqrt(-2 * gravity), def.z);
     }
 }

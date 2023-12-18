@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using System.Threading;
 using VContainer;
 using VContainer.Unity;
 using System;
 using UniRx;
-using UnityEngine.InputSystem;
 using Player;
-using UniRx.Triggers;
+using KanKikuchi.AudioManager;
+using Stage;
 namespace GameMain
 {
     public class InGameSequencer : IInitializable, IDisposable
@@ -17,31 +14,56 @@ namespace GameMain
         private InGameUIModel inGameUIModel;
         private InputModel inputModel;
         private PlayerCore playerCore;
-        private bool isDied;
+        private MainGameUIViewer mainGameUIViewer;
         private bool isPaused;
-        private bool isSuccess;
+        private InGameUIModel.InGameUiType gameStatus;
+        private CompositeDisposable _disposable = new CompositeDisposable();
+        private float startTime;
+        private StageData stageData;
 
         [Inject]
         public InGameSequencer
         (
             InGameUIModel inGameUIModel,
+            MainGameUIViewer mainGameUIViewer,
             InputModel inputModel,
             PlayerModel playerModel,
-            PlayerCore playerCore
+            PlayerCore playerCore,
+            StageData stageData
         )
         {
+            Application.targetFrameRate = 60;
+
             this.inGameUIModel = inGameUIModel;
             this.inputModel = inputModel;
             this.playerCore = playerCore;
+            this.stageData = stageData;
+            this.mainGameUIViewer = mainGameUIViewer;
+
+            StageLoader.InitSettings();
 
             SetInputEvent();
 
+            //ゲームの状態を取得
             inGameUIModel.inGameUiId
             .SkipLatestValueOnSubscribe()
             .Subscribe(type =>
             {
                 isPaused = type == InGameUIModel.InGameUiType.pause;
-            });
+
+                gameStatus = type;
+
+                if (type == InGameUIModel.InGameUiType.main)
+                {
+                    BGMManager.Instance.Play(BGMPath.MUS_MUS_BGM104, 0.3f);
+                    startTime = Time.time;
+                    return;
+                }
+
+                SEManager.Instance.Stop();
+                BGMManager.Instance.Stop();
+
+            }).AddTo(_disposable);
 
             //Playerのイベントを登録
             playerModel.PlayerHp
@@ -51,21 +73,21 @@ namespace GameMain
                 //死亡
                 if (hp <= 0)
                 {
-                    isDied = true;
                     inGameUIModel.ChangeUIId(InGameUIModel.InGameUiType.dead);
                 }
             });
 
+            //成功
             playerModel.isSucsess
             .SkipLatestValueOnSubscribe()
             .Subscribe(sucess =>
             {
                 if (sucess)
                 {
-                    isSuccess = true;
                     inGameUIModel.ChangeUIId(InGameUIModel.InGameUiType.clear);
                 }
-            });
+
+            }).AddTo(_disposable);
         }
 
         void SetInputEvent()
@@ -78,7 +100,7 @@ namespace GameMain
             .SkipLatestValueOnSubscribe()
             .Subscribe(isFire =>
             {
-                if (isPaused || isDied || isSuccess) return;
+                if (gameStatus != InGameUIModel.InGameUiType.main) return;
 
                 if (isFire)
                 {
@@ -88,40 +110,65 @@ namespace GameMain
                 {
                     playerCore.Release();
                 }
-            });
+
+            }).AddTo(_disposable);
 
             //Update
             Observable.EveryUpdate()
             .Subscribe(_ =>
             {
-                if (isPaused || isDied || isSuccess) return;
+                if (gameStatus != InGameUIModel.InGameUiType.main) return;
+
                 //移動
                 playerCore.Move(inputModel.Move.Value);
+                playerCore.GrapplingMove();
 
                 //視点移動
                 playerCore.Look(inputModel.Look.Value);
-            });
+
+                //時間計測
+                inGameUIModel.ChangeTime(Time.time - startTime);
+
+                Color color = playerCore.canReticle() ? Color.red : Color.white;
+                mainGameUIViewer.ChnageReticleColor(color);
+
+            }).AddTo(_disposable);
 
             //ポーズボタン
             inputModel.Pause
             .SkipLatestValueOnSubscribe()
             .Subscribe(pause =>
             {
-                if (isDied || isSuccess || !pause) return;
+                if (gameStatus != InGameUIModel.InGameUiType.main) return;
                 isPaused = !isPaused;
                 inGameUIModel.ChangeUIId(isPaused ? InGameUIModel.InGameUiType.pause : InGameUIModel.InGameUiType.main);
-            });
+            }).AddTo(_disposable);
+
+            //タイム更新
+            inGameUIModel.passedTime
+            .SkipLatestValueOnSubscribe()
+            .Subscribe(time =>
+            {
+                mainGameUIViewer.UpdateTimeText(time);
+            }).AddTo(_disposable);
 
         }
 
         public void Dispose()
         {
-
+            _disposable.Clear();
         }
 
         public void Initialize()
         {
             inGameUIModel.ChangeUIId(InGameUIModel.InGameUiType.main);
+            inGameUIModel.ChangeEnemyCount(stageData.ClearEnemyCount);
+            playerCore.setDefeatEnemyEvent = DefeatEnemy;
+        }
+
+        void DefeatEnemy()
+        {
+            inGameUIModel.ChangeEnemyCount(inGameUIModel.enemyCount.Value - 1);
         }
     }
 }

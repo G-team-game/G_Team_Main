@@ -6,8 +6,8 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 public class PlayerCam : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
+    private float sensX;
+    private float sensY;
 
     PlayerInputSystem inputSystem;
 
@@ -84,14 +84,12 @@ public class PlayerCam : MonoBehaviour
 
     public void Look(Vector2 camDirection)
     {
-        InputDevice inputDevice = InputSystem.devices.FirstOrDefault(d => d.enabled);
-
-        if (inputDevice is Pointer)
+        if (Gamepad.current != null)
         {
-            sensX = 5f;
-            sensY = 5f;
+            sensX = 200f;
+            sensY = 200f;
         }
-        else if (inputDevice is Gamepad)
+        else
         {
             sensX = 100f;
             sensY = 100f;

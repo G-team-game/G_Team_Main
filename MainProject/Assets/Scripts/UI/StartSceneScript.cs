@@ -43,7 +43,7 @@ public class StartSceneScript : MonoBehaviour
     public void OnSelect(BaseEventData eventData)
     {
         Debug.Log("selected!!");
-        SEManager.Instance.Play(SEPath.MAP_DOWN);
+        SEManager.Instance.Play(SEPath.HIGHLIGHT);
     }
 
     public void OnStart()
@@ -76,7 +76,7 @@ public class StartSceneScript : MonoBehaviour
 
     public void OnPointEnter()
     {
-        SEManager.Instance.Play(SEPath.MAP_DOWN);
+        SEManager.Instance.Play(SEPath.HIGHLIGHT);
     }
 
     public void OnExit()

@@ -4,7 +4,6 @@ using UnityEngine;
 public class Grappling : MonoBehaviour
 {
     [Header("References")]
-    private PlayerMove pm;
     public Transform cam;
     public Transform gunTip;
     public LayerMask whatIsGrappleable;
@@ -35,32 +34,13 @@ public class Grappling : MonoBehaviour
     private void Start()
     {
         isEnemy = false;
-        pm = GetComponent<PlayerMove>();
     }
 
-    public void PlayerShot()
+    public RaycastHit PlayerShot()
     {
-        StartGrapple();
-    }
-
-    void Update()
-    {
-        if (grapplingCdTimer > 0)
-            grapplingCdTimer -= Time.deltaTime;
-    }
-
-    private void StartGrapple()
-    {
-        if (grapplingCdTimer > 0)
-        {
-            return;
-        }
-
         playerCam.CameraShake(false);
 
         grappling = true;
-
-        pm.freeze = true;
 
         RaycastHit hit;
         if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable))
@@ -82,25 +62,29 @@ public class Grappling : MonoBehaviour
 
             Invoke(nameof(StopGrapple), 0.1f);
         }
+
+        return hit;
+    }
+
+    public bool canGrapple()
+    {
+        RaycastHit hit;
+        Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, whatIsGrappleable);
+        return hit.collider;
     }
 
     private void ExecuteGrapple()
     {
-        pm.freeze = false;
-
         Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
 
         float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
         float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
 
         if (grapplePointRelativeYPos < 0) highestPointOnArc = overshootYAxis;
-        pm.JumpToPosition(grapplePoint, highestPointOnArc);
     }
 
     public void StopGrapple()
     {
-        pm.freeze = false;
-
         grappling = false;
 
         grapplingCdTimer = grapplingCd;

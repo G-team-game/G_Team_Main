@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using static InGameUIModel;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 public class InGameUIPresenter : MonoBehaviour
 {
     [SerializeField] private List<FadeViewer> uiViewers = new List<FadeViewer>();
+    [SerializeField] private List<Button> firstSelectButton = new List<Button>();
     [SerializeField] private InGameUIModel inGameUIModel;
 
     private void Start()
@@ -28,7 +32,15 @@ public class InGameUIPresenter : MonoBehaviour
                 {
                     uiViewers[i].FadeOut();
                 }
+
             }
+
+            if (Gamepad.current != null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                firstSelectButton[(int)type].Select();
+            }
+
         }).AddTo(this);
     }
 }
