@@ -12,6 +12,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: pant
+    second: {fileID: 2100000, guid: 3f9bf985f06dc4373924344f5710311e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: wing1
     second: {fileID: 2100000, guid: 0809fe2ed4f4640f4ac0c571008466cd, type: 2}
   - first:
@@ -19,21 +24,6 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: wingbase
     second: {fileID: 2100000, guid: 3f9bf985f06dc4373924344f5710311e, type: 2}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: UUV03
-    second: {fileID: 2800000, guid: 4ac6416d4d30149fc8a696b972a13cf5, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: wing
-    second: {fileID: 2800000, guid: 4ebaebba781f343b98cc2a27653a2f6e, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: wing_base
-    second: {fileID: 2800000, guid: bc9b163ac08994ad4b682f99b5e55873, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

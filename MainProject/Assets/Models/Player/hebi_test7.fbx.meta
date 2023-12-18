@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: ad2a4c2a157b24d94ad9317538917e1f
+guid: 03edba3c8070745f7a01a0367b2ba244
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: 951543b2102f2448687490a70c289d3e, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: hebi_texture_CM4
+    second: {fileID: 2800000, guid: 0358623173901435faac932f513830ca, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -97,7 +107,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
