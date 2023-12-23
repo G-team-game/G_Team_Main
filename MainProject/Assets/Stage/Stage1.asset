@@ -16,4 +16,4 @@ MonoBehaviour:
   stageName: StageName
   stageDescription: description
   stageObject: {fileID: 8896252125151995506, guid: 800669ee6dbde4f62909d97222cc3cc4, type: 3}
-  clearEnemyCount: 8
+  clearEnemyCount: 25

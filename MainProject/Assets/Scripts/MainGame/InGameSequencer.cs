@@ -20,6 +20,7 @@ namespace GameMain
         private CompositeDisposable _disposable = new CompositeDisposable();
         private float startTime;
         private StageData stageData;
+        private int defeatEnemyCount;
 
         [Inject]
         public InGameSequencer
@@ -162,13 +163,15 @@ namespace GameMain
         public void Initialize()
         {
             inGameUIModel.ChangeUIId(InGameUIModel.InGameUiType.main);
-            inGameUIModel.ChangeEnemyCount(stageData.ClearEnemyCount);
+            inGameUIModel.ChangeEnemyCount(0);
+            inGameUIModel.SetStageEnemyCount(stageData.ClearEnemyCount);
             playerCore.setDefeatEnemyEvent = DefeatEnemy;
         }
 
         void DefeatEnemy()
         {
-            inGameUIModel.ChangeEnemyCount(inGameUIModel.enemyCount.Value - 1);
+            defeatEnemyCount++;
+            inGameUIModel.ChangeEnemyCount(inGameUIModel.enemyCount.Value + 1);
         }
     }
 }

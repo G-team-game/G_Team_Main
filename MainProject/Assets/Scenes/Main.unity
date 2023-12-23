@@ -280,8 +280,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 792df28832bb3d1478f685f3583d97f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 150
-  maxMoveSpeed: 200
+  moveSpeed: 100
+  maxMoveSpeed: 150
   sprintSpeed: 10
   jumpForce: 1
   jumpCooldown: 1.55
@@ -1034,6 +1034,7 @@ MonoBehaviour:
   - {fileID: 658257924443770729}
   - {fileID: 658257923866582861}
   inGameUIModel: {fileID: 504089023}
+  clearText: {fileID: 2146133230}
 --- !u!114 &504089023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7476,7 +7477,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.3, z: -0.3}
+  m_LocalPosition: {x: 0, y: 1, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11723,6 +11724,7 @@ GameObject:
   - component: {fileID: 658257924874158353}
   - component: {fileID: 658257924874158357}
   - component: {fileID: 658257924874158356}
+  - component: {fileID: 658257924874158358}
   m_Layer: 5
   m_Name: Success
   m_TagString: Untagged
@@ -11756,6 +11758,19 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &658257924874158358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 658257924874158355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20b935ab334e743fda48424b67cd45ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 2146133230}
 --- !u!222 &658257924962449393
 CanvasRenderer:
   m_ObjectHideFlags: 0

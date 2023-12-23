@@ -6,11 +6,14 @@ using static InGameUIModel;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.SceneManagement;
 public class InGameUIPresenter : MonoBehaviour
 {
     [SerializeField] private List<FadeViewer> uiViewers = new List<FadeViewer>();
     [SerializeField] private List<Button> firstSelectButton = new List<Button>();
     [SerializeField] private InGameUIModel inGameUIModel;
+    [SerializeField] private TextMeshProUGUI clearText;
 
     private void Start()
     {
@@ -41,6 +44,21 @@ public class InGameUIPresenter : MonoBehaviour
                 firstSelectButton[(int)type].Select();
             }
 
+            if (type == InGameUiType.clear)
+            {
+                SetClearUI();
+            }
+
+            if (type == InGameUiType.outgame)
+            {
+                SceneManager.LoadScene("StartMenu");
+            }
+
         }).AddTo(this);
+    }
+
+    void SetClearUI()
+    {
+        clearText.text = $"Defeat Enemy Count:{inGameUIModel.enemyCount}/{inGameUIModel.stageEnemyCount}\nClear Time{inGameUIModel.passedTime}";
     }
 }

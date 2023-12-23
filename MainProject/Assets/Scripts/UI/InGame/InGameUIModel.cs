@@ -22,6 +22,7 @@ public class InGameUIModel : MonoBehaviour
     //倒した敵の数
     public IReadOnlyReactiveProperty<int> enemyCount => _enemyCount;
     private readonly IntReactiveProperty _enemyCount = new IntReactiveProperty(0);
+    public int stageEnemyCount { get; private set; }
 
     public void ChangeTime(float time)
     {
@@ -36,6 +37,11 @@ public class InGameUIModel : MonoBehaviour
     public void ChangeUIId(InGameUiType type)
     {
         _inGameUiId.Value = type;
+    }
+
+    public void SetStageEnemyCount(int value)
+    {
+        stageEnemyCount = value;
     }
 
     public void ChangeEnemyCount(int value)
