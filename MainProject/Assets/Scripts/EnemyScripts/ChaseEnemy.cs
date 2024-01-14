@@ -1,4 +1,3 @@
-//ray‚ÅáŠQ•¨”»’èì‚Á‚Ä‚é“r’†
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
